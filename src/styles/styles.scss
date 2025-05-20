@@ -1,9 +1,7 @@
-@use "./fonts" as *;
 @use "./variables" as *;
 
 html,
 body {
-  font-family: "Roboto";
   margin: 0;
   padding: 0;
 }
@@ -23,4 +21,11 @@ blockquote,
 figure,
 pre {
   margin: 0;
+}
+
+.container {
+  width: 1140px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 40px 0;
 }

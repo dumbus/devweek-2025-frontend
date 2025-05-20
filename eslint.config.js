@@ -95,7 +95,7 @@ export default [
             order: 'asc',
             caseInsensitive: true
           },
-          'newlines-between': 'always',
+          'newlines-between': 'always-and-inside-groups',
           warnOnUnassignedImports: true
         }
       ]
