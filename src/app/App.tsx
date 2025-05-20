@@ -1,13 +1,16 @@
 import { Theme, presetGpnDefault } from '@consta/uikit/Theme';
 
-import { Posts } from 'pages/posts';
+import { Posts, SinglePost } from 'pages';
 
 import 'styles/styles.scss';
 
+// TODO: Routing
+// TODO: Header with menu
 const App = () => {
   return (
     <Theme preset={presetGpnDefault}>
-      <Posts />
+      {/* <Posts /> */}
+      <SinglePost postId={1} />
     </Theme>
   );
 };

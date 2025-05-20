@@ -3,6 +3,7 @@ import { Layout } from '@consta/uikit/Layout';
 import { generatePostListsData } from 'shared';
 import { PostsList } from 'widgets';
 
+// TODO: Pagination
 export const Posts = () => {
   const postsListData = generatePostListsData();
 
