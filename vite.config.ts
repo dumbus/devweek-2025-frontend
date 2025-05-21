@@ -9,6 +9,7 @@ export default defineConfig({
       app: '/src/app',
       entities: '/src/entities',
       pages: '/src/pages',
+      services: '/src/services',
       shared: '/src/shared',
       styles: '/src/styles',
       widgets: '/src/widgets'

@@ -26,6 +26,7 @@
       "app/*": ["app/*"],
       "entities/*": ["entities/*"],
       "pages/*": ["pages/*"],
+      "services/*": ["services/*"],
       "shared/*": ["shared/*"],
       "styles/*": ["styles/*"],
       "widgets/*": ["widgets/*"],

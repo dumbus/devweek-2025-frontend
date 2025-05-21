@@ -152,7 +152,7 @@ export const generatePostListsData = (): IPostsListData => {
 
 export const generateSinglePostData = (id: number): ISinglePostData => {
   const currentPostData = mockData[id - 1];
-  const mockPostDescription = currentPostData.title.repeat(20);
+  const mockPostDescription = 'Себестоимость строительства с 2022 года выросла на 35–100% у разных девелоперов. На это повлияло множество факторов: от цен на стройматериалы до логистики, стоимости рабочей силы и изменений в законодательстве. В условиях нестабильной экономики, инфляции и санкционного давления застройщики ищут способы контроля затрат и пути оптимизации.';
 
   return {
     ...currentPostData,

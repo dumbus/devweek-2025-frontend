@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { Button } from '@consta/uikit/Button';
 import { Grid, GridItem } from '@consta/uikit/Grid';
 import { Layout } from '@consta/uikit/Layout';
 import { Tag } from '@consta/uikit/Tag';
@@ -7,12 +8,13 @@ import { Text } from '@consta/uikit/Text';
 
 import { useParams } from 'react-router-dom';
 
+import { OpenRouterTextService } from 'services/OpenRouterService';
 import { generateSinglePostData } from 'shared';
 import { ISinglePostData } from 'shared';
 
 import styles from './SinglePost.module.scss';
 
-// TODO: Button "Generate"
+// TODO: Button "Generate" (generate image)
 // TODO: Popover with settings for generation
 // TODO: Loader & Error Handling
 export const SinglePost = () => {
@@ -26,6 +28,23 @@ export const SinglePost = () => {
 
     setData(postData);
   }, [postId]);
+
+  const handleClick = async () => {
+    if (!data) return;
+
+    try {
+      const openRouterTextService = new OpenRouterTextService(
+        import.meta.env.VITE_OPENROUTER_AUTH_KEY,
+        window.location.href,
+        'devweeks-2025'
+      );
+
+      const response = await openRouterTextService.getPostTextFromArticle(data.description);
+      console.log(response);
+    } catch (err) {
+      console.error('Ошибка при запросе к OpenRouter:', err);
+    }
+  };
 
   return (
     <Layout className="container">
@@ -60,6 +79,8 @@ export const SinglePost = () => {
                 </Text>
               </Layout>
             </Layout>
+
+            <Button label="Сгенерировать" onClick={handleClick} />
           </GridItem>
 
           <GridItem col={5}>

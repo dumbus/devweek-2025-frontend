@@ -26,3 +26,5 @@ dist-ssr
 
 # Lock files
 *-lock.json
+
+.env

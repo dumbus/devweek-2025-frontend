@@ -22,8 +22,10 @@ export default [
     globals: {
       window: 'readonly',
       document: 'readonly',
+      console: 'readonly',
     },
     ecmaVersion: 2021,
+    browser: true,
   },
   },
   {
@@ -62,7 +64,7 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'no-console': 'warn',
+      'no-console': 'off',
       'import/default': 'off',
       'import/order': [
         'error',
