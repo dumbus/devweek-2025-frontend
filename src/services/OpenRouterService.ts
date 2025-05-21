@@ -1,6 +1,6 @@
 import { IOpenRouterModel, IOpenRouterRequest, IOpenRouterResponse } from 'shared';
 
-import { getTextPromptFromArticle } from 'shared';
+import { getPromptFromArticle } from 'shared';
 
 export class OpenRouterTextService {
   private static readonly BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -20,25 +20,26 @@ export class OpenRouterTextService {
     this.siteName = siteName;
   }
 
-  public async getPostTextFromArticle(article: string): Promise<string> {
+  public async generateTextFromDescription(article: string): Promise<string> {
     const response = await this.getResponse(article);
 
     return this.extractMessageContent(response);
   }
 
   private async getResponse(article: string): Promise<IOpenRouterResponse> {
-    const prompt = getTextPromptFromArticle(article);
+    const prompt = getPromptFromArticle('text', article);
 
     for (const model of OpenRouterTextService.MODELS) {
       try {
         const response = await this.tryGetResponseWithModel(prompt, model);
+
         return response;
       } catch (error) {
-        console.warn(`Failed with model ${model}:`, error);
+        console.warn(`OpenRouter Text Generation failed with model ${model}:`, error);
       }
     }
 
-    throw new Error('All models failed');
+    throw new Error('All OpenRouter Text Generation models failed');
   }
 
   private async tryGetResponseWithModel(prompt: string, model: IOpenRouterModel): Promise<IOpenRouterResponse> {
@@ -73,7 +74,8 @@ export class OpenRouterTextService {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      throw new Error(errorData?.error?.message || `Request failed with status ${response.status}`);
+      
+      throw new Error(errorData?.error?.message || `OpenRouter Text Generation request failed with status ${response.status}`);
     }
 
     return response.json();
@@ -81,12 +83,12 @@ export class OpenRouterTextService {
 
   private extractMessageContent(response: IOpenRouterResponse): string {
     if (!response.choices || response.choices.length === 0) {
-      throw new Error('No choices in response');
+      throw new Error('OpenRouter Text Generation returned empty result');
     }
     
     const firstChoice = response.choices[0];
     if (!firstChoice.message || !firstChoice.message.content) {
-      throw new Error('No message content in response');
+      throw new Error('OpenRouter Text Generation returned empty result');
     }
     
     return firstChoice.message.content;

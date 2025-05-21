@@ -1,2 +1,3 @@
+export * from './aiServiceTypes';
 export * from './entitiesTypes';
-export * from './openRouterTypes';
+export * from './generalTypes';

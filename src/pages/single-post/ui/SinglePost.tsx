@@ -9,6 +9,7 @@ import { Text } from '@consta/uikit/Text';
 import { useParams } from 'react-router-dom';
 
 import { OpenRouterTextService } from 'services/OpenRouterService';
+import { FusionBrainService } from 'services/FusionBrainService';
 import { generateSinglePostData } from 'shared';
 import { ISinglePostData } from 'shared';
 
@@ -21,6 +22,7 @@ export const SinglePost = () => {
   const { id: postId } = useParams();
 
   const [data, setData] = useState<ISinglePostData | null>(null);
+  const [imgUrl, setImgUrl] = useState('');
 
   useEffect(() => {
     const currentPostId = Number(postId);
@@ -29,22 +31,37 @@ export const SinglePost = () => {
     setData(postData);
   }, [postId]);
 
+  // const handleClick = async () => {
+  //   if (!data) return;
+
+  //   try {
+  //     const openRouterTextService = new OpenRouterTextService(
+  //       import.meta.env.VITE_OPENROUTER_AUTH_KEY,
+  //       window.location.href,
+  //       'devweeks-2025'
+  //     );
+
+  //     const response = await openRouterTextService.generateTextFromDescription(data.description);
+  //     console.log(response);
+  //   } catch (err) {
+  //     console.error('Ошибка при запросе к OpenRouter:', err);
+  //   }
+  // };
+
   const handleClick = async () => {
     if (!data) return;
 
     try {
-      const openRouterTextService = new OpenRouterTextService(
-        import.meta.env.VITE_OPENROUTER_AUTH_KEY,
-        window.location.href,
-        'devweeks-2025'
-      );
+      const fusionBrainService = new FusionBrainService(import.meta.env.VITE_FUSIONBRAIN_API_KEY, import.meta.env.VITE_FUSIONBRAIN_SECRET_KEY);
 
-      const response = await openRouterTextService.getPostTextFromArticle(data.description);
-      console.log(response);
+      const { imageBase64 } = await fusionBrainService.generateImageByDescription(data.description);
+      const imageUrl = `data:image/png;base64,${imageBase64}`;
+
+      setImgUrl(imageUrl);
     } catch (err) {
-      console.error('Ошибка при запросе к OpenRouter:', err);
+      console.error('Ошибка при запросе к FusionBrain:', err);
     }
-  };
+  }
 
   return (
     <Layout className="container">
@@ -81,6 +98,8 @@ export const SinglePost = () => {
             </Layout>
 
             <Button label="Сгенерировать" onClick={handleClick} />
+
+            { imgUrl && <img src={imgUrl} alt="Сгенерированная картинка" /> }
           </GridItem>
 
           <GridItem col={5}>

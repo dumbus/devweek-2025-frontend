@@ -20,3 +20,8 @@ export interface IOpenRouterResponse {
     message: IOpenRouterMessage;
   }[];
 }
+
+export interface IFusionBrainGenerationResult {
+  imageBase64: string;
+  censored: boolean;
+}
