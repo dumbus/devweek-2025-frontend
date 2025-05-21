@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/devweek-2025-frontend/',
+  base: '/',
   plugins: [react()],
   resolve: {
     alias: {
