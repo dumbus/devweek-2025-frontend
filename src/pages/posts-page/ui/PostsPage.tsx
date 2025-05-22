@@ -4,7 +4,7 @@ import { generatePostListsData } from 'shared';
 import { PostsList } from 'widgets';
 
 // TODO: Pagination
-export const Posts = () => {
+export const PostsPage = () => {
   const postsListData = generatePostListsData();
 
   return (

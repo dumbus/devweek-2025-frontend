@@ -24,12 +24,12 @@
 
     "paths": {
       "app/*": ["app/*"],
-      "entities/*": ["entities/*"],
+      "features/*": ["features/*"],
       "pages/*": ["pages/*"],
       "services/*": ["services/*"],
       "shared/*": ["shared/*"],
       "styles/*": ["styles/*"],
-      "widgets/*": ["widgets/*"],
+      "widgets/*": ["widgets/*"]
     }
   },
   "include": ["src", "vite.config.ts", "eslint.config.js"],

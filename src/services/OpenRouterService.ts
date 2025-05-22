@@ -1,5 +1,4 @@
 import { IOpenRouterModel, IOpenRouterRequest, IOpenRouterResponse } from 'shared';
-
 import { getPromptFromArticle } from 'shared';
 
 export class OpenRouterTextService {

@@ -1,11 +1,14 @@
-import { Grid, GridItem } from '@consta/uikit/Grid';
-import { PostsListItem } from 'entities';
 import { Link } from 'react-router-dom';
+
+import { Grid, GridItem } from '@consta/uikit/Grid';
+
+import { PostsListItem } from 'features';
 
 import { IPostsList } from '../model/types';
 
 import styles from './PostsList.module.scss';
 
+// TODO: Button "Generate" -> Open Page with generation settings and results
 // TODO: Loader & Error Handling
 export const PostsList = ({ postsListData }: IPostsList) => {
   const { data } = postsListData;

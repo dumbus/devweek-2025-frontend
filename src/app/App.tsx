@@ -1,7 +1,8 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
 import { Theme, presetGpnDefault } from '@consta/uikit/Theme';
 
-import { Posts, SinglePost } from 'pages';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { PostsPage, SinglePostPage } from 'pages';
 
 import 'styles/styles.scss';
 
@@ -11,8 +12,8 @@ const App = () => {
     <Theme preset={presetGpnDefault}>
       <BrowserRouter>
         <Routes>
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/posts/:id" element={<SinglePost />} />
+          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/posts/:id" element={<SinglePostPage />} />
           <Route path="*" element={<Navigate to="/posts" replace />} />
         </Routes>
       </BrowserRouter>

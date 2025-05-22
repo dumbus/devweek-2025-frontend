@@ -24,8 +24,7 @@ export default [
         document: 'readonly',
         console: 'readonly'
       },
-      ecmaVersion: 2021,
-      browser: true
+      ecmaVersion: 2021
     }
   },
   {
@@ -64,43 +63,8 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'no-console': 'warn',
-      'import/default': 'off',
-      'import/order': [
-        'error',
-        {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling'],
-          pathGroups: [
-            {
-              pattern: 'react',
-              group: 'external',
-              position: 'before'
-            },
-            {
-              pattern: './**/*.module.scss',
-              group: 'sibling',
-              position: 'after'
-            },
-            {
-              pattern: '**/*.scss',
-              group: 'index',
-              position: 'after'
-            },
-            {
-              pattern: 'app/**',
-              group: 'internal',
-              position: 'before'
-            }
-          ],
-          pathGroupsExcludedImportTypes: ['react'],
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true
-          },
-          'newlines-between': 'always-and-inside-groups',
-          warnOnUnassignedImports: true
-        }
-      ]
+      'no-console': 'off',
+      'import/default': 'off'
     },
     settings: {
       'import/parsers': {

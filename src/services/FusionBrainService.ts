@@ -1,5 +1,4 @@
 import { getPromptFromArticle } from 'shared';
-
 import { IFusionBrainGenerationResult } from 'shared';
 
 // TODO: Обработать случаи, когда сервис недоступен (возвращает pipeline_status вместо uuid)

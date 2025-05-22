@@ -1,18 +1,17 @@
-@use '../../../styles/variables' as *;
+@use "../../../styles/variables" as *;
 
 .post {
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px
+    border-radius: 10px;
   }
 
   &__info {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
 
     &About {
       gap: 10px;

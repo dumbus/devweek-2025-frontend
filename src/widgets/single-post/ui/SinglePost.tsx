@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { IconBackward } from '@consta/icons/IconBackward';
 import { IconOpenInNew } from '@consta/icons/IconOpenInNew';
+
 import { Badge } from '@consta/uikit/Badge';
 import { Button } from '@consta/uikit/Button';
 import { Grid, GridItem } from '@consta/uikit/Grid';
@@ -9,63 +10,14 @@ import { Layout } from '@consta/uikit/Layout';
 import { Tag } from '@consta/uikit/Tag';
 import { Text } from '@consta/uikit/Text';
 
-import { useNavigate, useParams } from 'react-router-dom';
-
-// import { OpenRouterTextService } from 'services/OpenRouterService';
-// import { FusionBrainService } from 'services/FusionBrainService';
-import { generateSinglePostData } from 'shared';
-import { ISinglePostData } from 'shared';
+import { ISinglePost } from '../model/types';
 
 import styles from './SinglePost.module.scss';
 
 // TODO: Button "Generate" -> Open Page with generation settings and results
 // TODO: Loader & Error Handling
-export const SinglePost = () => {
+export const SinglePost = ({ data }: ISinglePost) => {
   const navigate = useNavigate();
-  const { id: postId } = useParams();
-
-  const [data, setData] = useState<ISinglePostData | null>(null);
-
-  useEffect(() => {
-    const currentPostId = Number(postId);
-    const postData = generateSinglePostData(currentPostId);
-
-    setData(postData);
-  }, [postId]);
-
-  // const [imgUrl, setImgUrl] = useState('');
-
-  // const handleClick = async () => {
-  //   if (!data) return;
-
-  //   try {
-  //     const openRouterTextService = new OpenRouterTextService(
-  //       import.meta.env.VITE_OPENROUTER_AUTH_KEY,
-  //       window.location.href,
-  //       'devweeks-2025'
-  //     );
-
-  //     const response = await openRouterTextService.generateTextFromDescription(data.description);
-  //     console.log(response);
-  //   } catch (err) {
-  //     console.error('OpenRouter Error:', err);
-  //   }
-  // };
-
-  // const handleClick = async () => {
-  //   if (!data) return;
-
-  //   try {
-  //     const fusionBrainService = new FusionBrainService(import.meta.env.VITE_FUSIONBRAIN_API_KEY, import.meta.env.VITE_FUSIONBRAIN_SECRET_KEY);
-
-  //     const { imageBase64 } = await fusionBrainService.generateImageByDescription(data.description);
-  //     const imageUrl = `data:image/png;base64,${imageBase64}`;
-
-  //     setImgUrl(imageUrl);
-  //   } catch (err) {
-  //     console.error('FusionBrain Error:', err);
-  //   }
-  // }
 
   return (
     <Layout className="container">
