@@ -7,7 +7,7 @@ export class OpenRouterTextService {
   private static readonly MODELS: IOpenRouterModel[] = [
     'google/gemma-3n-e4b-it:free',
     'deepseek/deepseek-prover-v2:free',
-    'meta-llama/llama-3.3-8b-instruct:free',
+    'meta-llama/llama-3.3-8b-instruct:free'
   ];
 
   private apiKey: string;
@@ -44,8 +44,8 @@ export class OpenRouterTextService {
 
   private async tryGetResponseWithModel(prompt: string, model: IOpenRouterModel): Promise<IOpenRouterResponse> {
     const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json'
     };
 
     if (this.siteUrl) {
@@ -74,8 +74,10 @@ export class OpenRouterTextService {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      
-      throw new Error(errorData?.error?.message || `OpenRouter Text Generation request failed with status ${response.status}`);
+
+      throw new Error(
+        errorData?.error?.message || `OpenRouter Text Generation request failed with status ${response.status}`
+      );
     }
 
     return response.json();
@@ -85,12 +87,12 @@ export class OpenRouterTextService {
     if (!response.choices || response.choices.length === 0) {
       throw new Error('OpenRouter Text Generation returned empty result');
     }
-    
+
     const firstChoice = response.choices[0];
     if (!firstChoice.message || !firstChoice.message.content) {
       throw new Error('OpenRouter Text Generation returned empty result');
     }
-    
+
     return firstChoice.message.content;
   }
 }

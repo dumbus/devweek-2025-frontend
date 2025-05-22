@@ -15,8 +15,12 @@
     
 
     &About {
-      gap: 8px;
+      gap: 10px;
     }
+  }
+
+  &__tag {
+    gap: 8px;
   }
 
   &__date {
@@ -37,5 +41,18 @@
     &:hover {
       color: $text-link-color;
     }
+  }
+
+  &__buttons {
+    gap: 16px;
+    margin-top: auto;
+  }
+
+  &__button {
+    width: 240px;
+  }
+
+  &__description {
+    white-space: pre-wrap;
   }
 }

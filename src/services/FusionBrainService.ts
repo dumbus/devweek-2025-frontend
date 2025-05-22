@@ -23,20 +23,28 @@ export class FusionBrainService {
     const prompt = getPromptFromArticle('image', article);
 
     const formData = new FormData();
-    formData.append('params', new Blob([JSON.stringify({
-        type: 'GENERATE',
-        width: 1024,
-        height: 1024,
-        numImages: 1,
-        generateParams: { query: prompt }
-      })], { type: 'application/json' }));
+    formData.append(
+      'params',
+      new Blob(
+        [
+          JSON.stringify({
+            type: 'GENERATE',
+            width: 1024,
+            height: 1024,
+            numImages: 1,
+            generateParams: { query: prompt }
+          })
+        ],
+        { type: 'application/json' }
+      )
+    );
     formData.append('pipeline_id', this.pipelineId);
 
     const response = await fetch(`${FusionBrainService.BASE_URL}pipeline/run`, {
       method: 'POST',
       headers: {
         'X-Key': `Key ${this.apiKey}`,
-        'X-Secret': `Secret ${this.secretKey}`,
+        'X-Secret': `Secret ${this.secretKey}`
       },
       body: formData
     });
@@ -54,7 +62,7 @@ export class FusionBrainService {
     const response = await fetch(`${FusionBrainService.BASE_URL}pipelines`, {
       headers: {
         'X-Key': `Key ${this.apiKey}`,
-        'X-Secret': `Secret ${this.secretKey}`,
+        'X-Secret': `Secret ${this.secretKey}`
       }
     });
 
@@ -63,12 +71,12 @@ export class FusionBrainService {
 
   private async waitForImage(uuid: string, timeout: number | undefined = 30): Promise<IFusionBrainGenerationResult> {
     for (let i = 0; i < timeout; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const status = await fetch(`${FusionBrainService.BASE_URL}pipeline/status/${uuid}`, {
         headers: {
           'X-Key': `Key ${this.apiKey}`,
-          'X-Secret': `Secret ${this.secretKey}`,
+          'X-Secret': `Secret ${this.secretKey}`
         }
       });
 
