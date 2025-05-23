@@ -23,6 +23,7 @@ import { getImageByStyleId } from '../model/helpers';
 import { StyleItem } from '../model/types';
 
 import styles from './GeneratePostPage.module.scss';
+import StableCogTester from 'services/StableCogTester';
 
 // TODO: Разнести код по компонентам
 export const GeneratePostPage = () => {
@@ -264,6 +265,7 @@ export const GeneratePostPage = () => {
             </Layout>
           </>
         )}
+        <StableCogTester />
       </Layout>
     </Layout>
   );
