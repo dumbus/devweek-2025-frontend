@@ -7,12 +7,18 @@ import { ResponsesEmptyBox } from '@consta/uikit/ResponsesEmptyBox';
 import { Responses404 } from '@consta/uikit/Responses404';
 import { IconHome } from '@consta/icons/IconHome';
 
-import { DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MESSAGE, EMPTY_DATA_ERROR_MESSAGE } from '../model/constants';
+import {
+  DEFAULT_ERROR_TITLE,
+  DEFAULT_ERROR_MESSAGE,
+  EMPTY_DATA_ERROR_MESSAGE,
+  GENERATION_ERROR_TITLE,
+  GENERATION_ERROR_MESSAGE
+} from '../model/constants';
 import { ICustomError } from '../model/types';
 
 import styles from './CustomError.module.scss';
 
-export const CustomError = ({ errorType, message, hasReturnButton = true }: ICustomError) => {
+export const CustomError = ({ errorType, message, hasReturnButton = true, customButton }: ICustomError) => {
   const navigate = useNavigate();
 
   const returnButton = hasReturnButton ? (
@@ -41,6 +47,14 @@ export const CustomError = ({ errorType, message, hasReturnButton = true }: ICus
       )}
 
       {errorType === 'not-found' && <Responses404 actions={returnButton} />}
+
+      {errorType === 'generation-error' && (
+        <ResponsesConnectionError
+          title={GENERATION_ERROR_TITLE}
+          description={GENERATION_ERROR_MESSAGE}
+          actions={customButton}
+        />
+      )}
     </Layout>
   );
 };

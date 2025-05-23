@@ -16,7 +16,9 @@ import { IconRevert } from '@consta/icons/IconRevert';
 import { OpenRouterTextService } from 'services/OpenRouterService';
 import { FusionBrainService } from 'services/FusionBrainService';
 
+import { CustomError } from 'features';
 import { getPromptFromArticle } from 'shared';
+import { ErrorType } from 'shared';
 
 import { IMAGE_STYLES, MIN_PROMPT_LENGTH } from '../model/constants';
 import { getImageByStyleId } from '../model/helpers';
@@ -24,7 +26,7 @@ import { StyleItem } from '../model/types';
 
 import styles from './GeneratePostPage.module.scss';
 
-// TODO: Разнести код по компонентам
+// TODO: Разнести код по компонентам (backlog)
 export const GeneratePostPage = () => {
   const location = useLocation();
 
@@ -41,6 +43,8 @@ export const GeneratePostPage = () => {
 
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
   const [generatedText, setGeneratedText] = useState('');
+
+  const [error, setError] = useState<ErrorType | null>(null);
 
   useEffect(() => {
     const title = location.state?.title;
@@ -87,9 +91,8 @@ export const GeneratePostPage = () => {
         const result = await openRouterTextService.generateTextFromPrompt(textPrompt);
 
         setGeneratedText(result);
-      } catch (err) {
-        // TODO: Error Handling
-        console.error('OpenRouter Error:', err);
+      } catch {
+        setError('generation-error');
       } finally {
         setIsTextLoading(false);
       }
@@ -118,9 +121,8 @@ export const GeneratePostPage = () => {
         const imageUrl = `data:image/png;base64,${imageBase64}`;
 
         setGeneratedImageUrl(imageUrl);
-      } catch (err) {
-        // TODO: Error Handling
-        console.error('FusionBrain Error:', err);
+      } catch {
+        setError('generation-error');
       } finally {
         setIsImageLoading(false);
       }
@@ -139,7 +141,20 @@ export const GeneratePostPage = () => {
 
   const isContentGenerated = generatedText && generatedImageUrl;
 
-  const showGenerationBlock = isTextLoading || isImageLoading || generatedText || generatedImageUrl;
+  const showGenerationBlock = isTextLoading || isImageLoading || generatedText || generatedImageUrl || error;
+  const showGenerationContent = showGenerationBlock && !error;
+
+  const regenerateButton = (
+    <Button
+      className={classNames(styles.button, styles.button_wide)}
+      label="Перегенерировать пост"
+      iconLeft={IconRevert}
+      onClick={() => {
+        handleTextGeneration();
+        handleImageGeneration();
+      }}
+    />
+  );
 
   return (
     <Layout className={classNames('container', 'containerBlock')}>
@@ -223,48 +238,54 @@ export const GeneratePostPage = () => {
             </Text>
 
             <Layout className={styles.generation}>
-              {generatedImageUrl && (
-                <img
-                  className={styles.generation__image}
-                  src={generatedImageUrl}
-                  alt="Сгенерированная иллюстрация для поста"
-                />
-              )}
-              {isImageLoading && !generatedImageUrl && (
-                <SkeletonBrick className={styles.generation__image} height={500} width={500} />
-              )}
+              {error && <CustomError errorType={error} customButton={regenerateButton} />}
 
-              <Layout direction="column" className={styles.generation__side}>
-                {isContentGenerated && (
-                  <Layout className={styles.generation__buttons}>
-                    <Button
-                      className={classNames(styles.button, styles.button_wide)}
-                      label="Перегенерировать пост"
-                      iconLeft={IconRevert}
-                      onClick={() => {
-                        handleTextGeneration();
-                        handleImageGeneration();
-                      }}
+              {showGenerationContent && (
+                <>
+                  {generatedImageUrl && (
+                    <img
+                      className={styles.generation__image}
+                      src={generatedImageUrl}
+                      alt="Сгенерированная иллюстрация для поста"
                     />
+                  )}
+                  {isImageLoading && !generatedImageUrl && (
+                    <SkeletonBrick className={styles.generation__image} height={500} width={500} />
+                  )}
 
-                    <Button
-                      className={classNames(styles.button, styles.button_wide)}
-                      label="Скачать картинку"
-                      iconLeft={IconDownload}
-                      onClick={() => {
-                        handleDownload(generatedImageUrl);
-                      }}
-                    />
+                  <Layout direction="column" className={styles.generation__side}>
+                    {isContentGenerated && (
+                      <Layout className={styles.generation__buttons}>
+                        <Button
+                          className={classNames(styles.button, styles.button_wide)}
+                          label="Перегенерировать пост"
+                          iconLeft={IconRevert}
+                          onClick={() => {
+                            handleTextGeneration();
+                            handleImageGeneration();
+                          }}
+                        />
+
+                        <Button
+                          className={classNames(styles.button, styles.button_wide)}
+                          label="Скачать картинку"
+                          iconLeft={IconDownload}
+                          onClick={() => {
+                            handleDownload(generatedImageUrl);
+                          }}
+                        />
+                      </Layout>
+                    )}
+
+                    {generatedText && (
+                      <Text className={styles.generation__text} size="l">
+                        {generatedText}
+                      </Text>
+                    )}
+                    {isTextLoading && !generatedText && <SkeletonText rows={5} fontSize="xl" lineHeight="xs" />}
                   </Layout>
-                )}
-
-                {generatedText && (
-                  <Text className={styles.generation__text} size="l">
-                    {generatedText}
-                  </Text>
-                )}
-                {isTextLoading && !generatedText && <SkeletonText rows={5} fontSize="xl" lineHeight="xs" />}
-              </Layout>
+                </>
+              )}
             </Layout>
           </>
         )}
