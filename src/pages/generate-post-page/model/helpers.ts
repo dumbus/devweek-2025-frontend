@@ -1,4 +1,5 @@
 import { StyleType } from 'shared';
+import { MIN_PROMPT_LENGTH } from './constants';
 
 import abstractImage from 'assets/abstractImage.png';
 import animeImage from 'assets/animeImage.jpg';
@@ -13,3 +14,5 @@ export const getImageByStyleId = (style: StyleType) => {
 
   return defaultImage;
 };
+
+export const checkIsValidPrompt = (prompt: string | null): boolean => !!prompt && prompt.length >= MIN_PROMPT_LENGTH;

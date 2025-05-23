@@ -1,5 +1,5 @@
-import { BASE_PROMPTS, MAX_PROMPT_LENGTH } from 'shared';
-import { PromptType } from 'shared';
+import { BASE_PROMPTS, MAX_PROMPT_LENGTH, IMAGE_STYLES } from 'shared';
+import { PromptType, StyleType } from 'shared';
 
 export const getPromptFromArticle = (promptType: PromptType, title: string, article: string) => {
   let prompt = '';
@@ -17,11 +17,17 @@ export const getPromptFromArticle = (promptType: PromptType, title: string, arti
     : prompt;
 };
 
-export const getSafePrompt = (promptType: PromptType, userPrompt: string) => {
+export const getSafePrompt = (promptType: PromptType, userPrompt: string, additionalStyle?: StyleType) => {
   let prompt = userPrompt;
 
   if (promptType === 'text' && userPrompt.length >= 100) {
     prompt += 'Не используй языки разметки вроде Markdown, выводи только обычный текст, допустимы смайлики (эмодзи).';
+  }
+
+  if (promptType === 'image' && additionalStyle) {
+    const style = IMAGE_STYLES.find((item) => item.id === additionalStyle)?.label || 'Стандартный стиль';
+
+    prompt = `Для генерации картинки используй ${style}.` + prompt;
   }
 
   return prompt.length > MAX_PROMPT_LENGTH[promptType]

@@ -1,4 +1,5 @@
 import { getSafePrompt } from 'shared';
+import { StyleType } from 'shared';
 
 export interface IStableCogGenerationResult {
   imageBase64: string;
@@ -17,18 +18,16 @@ export class StableCogService {
   public async generateImageByPrompt(
     userPrompt: string,
     userNegativePrompt: string | null = '',
-    width: number = 1024,
-    height: number = 1024,
-    numOutputs: number = 1
+    styleType: StyleType = 'DEFAULT'
   ): Promise<IStableCogGenerationResult> {
-    const prompt = getSafePrompt('image', userPrompt);
+    const prompt = getSafePrompt('image', userPrompt, styleType);
 
     const requestBody = {
       prompt,
       negative_prompt: userNegativePrompt,
-      width,
-      height,
-      num_outputs: numOutputs
+      width: 1024,
+      height: 1024,
+      num_outputs: 1
     };
 
     const response = await fetch(StableCogService.BASE_URL, {
@@ -45,15 +44,16 @@ export class StableCogService {
     }
 
     const data = await response.json();
-
     const imageUrl = data.outputs[0].image_url;
+
     const imageResponse = await fetch(imageUrl);
     const imageBlob = await imageResponse.blob();
+
     const base64 = await this.convertBlobToBase64(imageBlob);
 
     return {
-      imageBase64: base64
-      // remainingCredits: data.remaining_credits ?? undefined
+      imageBase64: base64,
+      remainingCredits: data.remaining_credits ?? undefined
     };
   }
 
@@ -65,6 +65,7 @@ export class StableCogService {
   private async convertBlobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
+
       reader.onloadend = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(blob);

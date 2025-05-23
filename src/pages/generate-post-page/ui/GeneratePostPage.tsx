@@ -15,14 +15,15 @@ import { IconRevert } from '@consta/icons/IconRevert';
 
 import { OpenRouterTextService } from 'services/OpenRouterService';
 import { FusionBrainService } from 'services/FusionBrainService';
+import { StableCogService } from 'services/StableCogService';
 
 import { CustomError } from 'features';
 import { getPromptFromArticle } from 'shared';
-import { ErrorType } from 'shared';
+import { ErrorType, IStyleItem } from 'shared';
+import { IMAGE_STYLES } from 'shared';
 
-import { IMAGE_STYLES, MIN_PROMPT_LENGTH } from '../model/constants';
-import { getImageByStyleId } from '../model/helpers';
-import { StyleItem } from '../model/types';
+import { MIN_PROMPT_LENGTH } from '../model/constants';
+import { getImageByStyleId, checkIsValidPrompt } from '../model/helpers';
 
 import styles from './GeneratePostPage.module.scss';
 
@@ -30,7 +31,7 @@ import styles from './GeneratePostPage.module.scss';
 export const GeneratePostPage = () => {
   const location = useLocation();
 
-  const [imageStyle, setImageStyle] = useState<StyleItem | null>(IMAGE_STYLES[0]);
+  const [imageStyle, setImageStyle] = useState<IStyleItem | null>(IMAGE_STYLES[0]);
   const [imageNegativePrompt, seImagetNegativePrompt] = useState<string | null>(null);
   const [imagePrompt, setImagePrompt] = useState<string | null>(null);
   const [textPrompt, setTextPrompt] = useState<string | null>(null);
@@ -59,7 +60,9 @@ export const GeneratePostPage = () => {
     }
   }, [location.state]);
 
-  const handleImageStyleChange = (value: StyleItem | null) => {
+  // Functions to change state
+
+  const handleImageStyleChange = (value: IStyleItem | null) => {
     setImageStyle(value);
   };
 
@@ -102,35 +105,67 @@ export const GeneratePostPage = () => {
   };
 
   const handleImageGeneration = async () => {
-    if (imagePrompt && imagePrompt.length >= MIN_PROMPT_LENGTH) {
-      setGeneratedImageUrl('');
-      setIsImageLoading(true);
-      setIsImagePromptAlert(false);
-
-      try {
-        const fusionBrainService = new FusionBrainService(
-          import.meta.env.VITE_FUSIONBRAIN_API_KEY,
-          import.meta.env.VITE_FUSIONBRAIN_SECRET_KEY
-        );
-
-        const { imageBase64 } = await fusionBrainService.generateImageByPrompt(
-          imagePrompt,
-          imageNegativePrompt,
-          imageStyle?.id
-        );
-        const imageUrl = `data:image/png;base64,${imageBase64}`;
-
-        setGeneratedImageUrl(imageUrl);
-      } catch {
-        setError('generation-error');
-      } finally {
-        setIsImageLoading(false);
-      }
-    } else {
+    if (!checkIsValidPrompt(imagePrompt)) {
       setIsImagePromptAlert(true);
+      return;
+    }
+
+    resetGenerationState();
+
+    try {
+      await generateWithFallback();
+    } catch {
+      setError('generation-error');
+    } finally {
+      setIsImageLoading(false);
     }
   };
 
+  const resetGenerationState = () => {
+    setGeneratedImageUrl('');
+    setIsImageLoading(true);
+    setIsImagePromptAlert(false);
+  };
+
+  // Functions to generate images with different Services
+
+  const generateWithFusionBrain = async () => {
+    const fusionBrainService = new FusionBrainService(
+      import.meta.env.VITE_FUSIONBRAIN_API_KEY,
+      import.meta.env.VITE_FUSIONBRAIN_SECRET_KEY
+    );
+
+    const { imageBase64 } = await fusionBrainService.generateImageByPrompt(
+      imagePrompt!,
+      imageNegativePrompt,
+      imageStyle?.id
+    );
+
+    setGeneratedImageUrl(`data:image/png;base64,${imageBase64}`);
+  };
+
+  const generateWithStableCog = async () => {
+    const stableCogService = new StableCogService(import.meta.env.VITE_STABLECOG_SECRET_KEY);
+
+    const { imageBase64 } = await stableCogService.generateImageByPrompt(
+      imagePrompt!,
+      imageNegativePrompt,
+      imageStyle?.id
+    );
+
+    setGeneratedImageUrl(imageBase64);
+  };
+
+  // Function to call image generation functions with Fallback
+  const generateWithFallback = async () => {
+    try {
+      await generateWithFusionBrain();
+    } catch {
+      await generateWithStableCog();
+    }
+  };
+
+  // Function to download image
   const handleDownload = (base64Image: string) => {
     const link = document.createElement('a');
 
