@@ -2,7 +2,6 @@ import { getSafePrompt } from 'shared';
 import { StyleType } from 'shared';
 import { IFusionBrainGenerationResult } from 'shared';
 
-// TODO: Обработать случаи, когда сервис недоступен (возвращает pipeline_status вместо uuid)
 export class FusionBrainService {
   private static readonly BASE_URL = 'https://api-key.fusionbrain.ai/key/api/v1/';
 
@@ -22,6 +21,11 @@ export class FusionBrainService {
   ): Promise<IFusionBrainGenerationResult> {
     if (!this.pipelineId) {
       this.pipelineId = await this.getPipelineId();
+    }
+
+    const isAvailable = await this.checkServiceAvailability();
+    if (!isAvailable) {
+      throw new Error('FusionBrain Image Generation service is currently unavailable');
     }
 
     const prompt = getSafePrompt('image', userPrompt);
@@ -100,5 +104,26 @@ export class FusionBrainService {
     }
 
     throw new Error('FusionBrain Image Generation timeout');
+  }
+
+  private async checkServiceAvailability(): Promise<boolean> {
+    if (!this.pipelineId) {
+      this.pipelineId = await this.getPipelineId();
+    }
+
+    try {
+      const response = await fetch(`${FusionBrainService.BASE_URL}pipeline/${this.pipelineId}/availability`, {
+        headers: {
+          'X-Key': `Key ${this.apiKey}`,
+          'X-Secret': `Secret ${this.secretKey}`
+        }
+      });
+
+      const data = await response.json();
+      return data.pipeline_status !== 'DISABLED_BY_QUEUE';
+    } catch (error) {
+      console.error('Failed to check FusionBrain Image Generation service availability:', error);
+      return false;
+    }
   }
 }
