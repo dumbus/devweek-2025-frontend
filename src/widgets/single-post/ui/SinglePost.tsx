@@ -19,6 +19,8 @@ import { PostsService } from 'services/PostsService';
 import { ErrorType, ISinglePostData } from 'shared';
 // import { generateSinglePostData } from 'shared';
 
+import postImageTemplate from 'assets/postPreviewTemplate.png';
+
 import { ISinglePost } from '../model/types';
 
 import styles from './SinglePost.module.scss';
@@ -33,28 +35,30 @@ export const SinglePost = ({ postId }: ISinglePost) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const id = Number(postId);
+    if (postId) {
+      const fetchPost = async () => {
+        try {
+          const id = Number(postId);
 
-        const postsService = new PostsService();
-        const data = await postsService.getPostById(id); // Начинаем с первой страницы
+          const postsService = new PostsService();
+          const data = await postsService.getPostById(id); // Начинаем с первой страницы
 
-        setPostData(data);
+          setPostData(data);
 
-        if (!data) {
-          setError('empty-data');
+          if (!data) {
+            setError('empty-data');
+          }
+        } catch (err) {
+          setError('default');
+          setErrorMessage(err instanceof Error ? err.message : 'Ошибка при загрузке данных');
+          setPostData(null);
+        } finally {
+          setIsDataLoading(false);
         }
-      } catch (err) {
-        setError('default');
-        setErrorMessage(err instanceof Error ? err.message : 'Ошибка при загрузке данных');
-        setPostData(null);
-      } finally {
-        setIsDataLoading(false);
-      }
-    };
+      };
 
-    fetchPost();
+      fetchPost();
+    }
 
     // generateSinglePostData(postId)
     //   .then((data) => {
@@ -84,7 +88,11 @@ export const SinglePost = ({ postId }: ISinglePost) => {
       {hasContent && (
         <Grid cols={5} colGap="2xl" rowGap="xl" className={styles.post}>
           <GridItem col={2}>
-            <img className={styles.post__image} src={postData.previewImageUrl} alt="Картинка для новости" />
+            <img
+              className={styles.post__image}
+              src={postData.previewImageUrl || postImageTemplate}
+              alt="Картинка для новости"
+            />
           </GridItem>
 
           <GridItem col={3} className={styles.post__info}>

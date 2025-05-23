@@ -2,6 +2,8 @@ import { Layout } from '@consta/uikit/Layout';
 import { SkeletonBrick, SkeletonText } from '@consta/uikit/Skeleton';
 import { Text } from '@consta/uikit/Text';
 
+import postImageTemplate from 'assets/postPreviewTemplate.png';
+
 import { IPostsListItem } from '../model/types';
 
 import styles from './PostsListItem.module.scss';
@@ -14,7 +16,7 @@ export const PostsListItem = ({ postsListItemData, isDataLoading }: IPostsListIt
       {isDataLoading ? (
         <SkeletonBrick height={260} />
       ) : (
-        <img className={styles.card__image} src={previewImageUrl} alt="Картинка для новости" />
+        <img className={styles.card__image} src={previewImageUrl || postImageTemplate} alt="Картинка для новости" />
       )}
 
       <Layout direction="column" className={styles.card__text}>

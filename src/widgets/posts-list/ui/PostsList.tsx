@@ -17,7 +17,7 @@ export const PostsList = () => {
   const [listData, setListData] = useState<IPostListItemData[]>([]);
   const [totalPages, setTotalPages] = useState(0); // TODO: for pagination
 
-  console.log(totalPages); // TODO: Убрать
+  // console.log(totalPages); // TODO: Убрать
 
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [error, setError] = useState<ErrorType | null>(null);
