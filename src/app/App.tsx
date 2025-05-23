@@ -13,6 +13,7 @@ const App = () => {
         <HeaderPage />
 
         <Routes>
+          <Route path="/" element={<PostsPage />} />
           <Route path="/posts" element={<PostsPage />} />
           <Route path="/posts/:id" element={<SinglePostPage />} />
           <Route path="/posts/generation" element={<GeneratePostPage />} />
