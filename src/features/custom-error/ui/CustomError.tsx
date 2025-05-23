@@ -4,6 +4,7 @@ import { Button } from '@consta/uikit/Button';
 import { Layout } from '@consta/uikit/Layout';
 import { ResponsesConnectionError } from '@consta/uikit/ResponsesConnectionError';
 import { ResponsesEmptyBox } from '@consta/uikit/ResponsesEmptyBox';
+import { Responses404 } from '@consta/uikit/Responses404';
 import { IconHome } from '@consta/icons/IconHome';
 
 import { DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MESSAGE, EMPTY_DATA_ERROR_MESSAGE } from '../model/constants';
@@ -34,9 +35,12 @@ export const CustomError = ({ errorType, message, hasReturnButton = true }: ICus
           actions={returnButton}
         />
       )}
+
       {errorType === 'empty-data' && (
         <ResponsesEmptyBox description={message || EMPTY_DATA_ERROR_MESSAGE} actions={returnButton} />
       )}
+
+      {errorType === 'not-found' && <Responses404 actions={returnButton} />}
     </Layout>
   );
 };
