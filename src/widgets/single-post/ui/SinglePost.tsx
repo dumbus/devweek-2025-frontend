@@ -14,7 +14,6 @@ import { ISinglePost } from '../model/types';
 
 import styles from './SinglePost.module.scss';
 
-// TODO: Button "Generate" -> Open Page with generation settings and results
 // TODO: Loader & Error Handling
 export const SinglePost = ({ data }: ISinglePost) => {
   const navigate = useNavigate();
@@ -69,7 +68,14 @@ export const SinglePost = ({ data }: ISinglePost) => {
                   navigate('/posts');
                 }}
               />
-              <Button className={styles.post__button} label="Перейти к генерации" iconLeft={IconOpenInNew} />
+              <Button
+                className={styles.post__button}
+                label="Перейти к генерации"
+                iconLeft={IconOpenInNew}
+                onClick={() => {
+                  navigate('/posts/generation', { state: { article: data.description, title: data.title } });
+                }}
+              />
             </Layout>
           </GridItem>
 

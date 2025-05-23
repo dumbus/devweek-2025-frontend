@@ -1,5 +1,6 @@
 {
   "name": "devweek-2025-frontend",
+  "homepage": ".",
   "private": true,
   "version": "0.0.0",
   "type": "module",

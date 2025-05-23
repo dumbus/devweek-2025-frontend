@@ -30,7 +30,11 @@ a {
 
 .container {
   width: 1140px;
-  min-height: 100vh;
   margin: 0 auto;
-  padding: 40px 0;
+
+  &Block {
+    min-height: 100vh;
+    margin-top: 64px;
+    padding: 40px 0;
+  }
 }

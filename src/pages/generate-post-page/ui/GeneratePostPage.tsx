@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { Button } from '@consta/uikit/Button';
@@ -15,6 +16,8 @@ import { IconRevert } from '@consta/icons/IconRevert';
 import { OpenRouterTextService } from 'services/OpenRouterService';
 import { FusionBrainService } from 'services/FusionBrainService';
 
+import { getPromptFromArticle } from 'shared';
+
 import { IMAGE_STYLES, MIN_PROMPT_LENGTH } from '../model/constants';
 import { getImageByStyleId } from '../model/helpers';
 import { StyleItem } from '../model/types';
@@ -23,6 +26,8 @@ import styles from './GeneratePostPage.module.scss';
 
 // TODO: Разнести код по компонентам
 export const GeneratePostPage = () => {
+  const location = useLocation();
+
   const [imageStyle, setImageStyle] = useState<StyleItem | null>(IMAGE_STYLES[0]);
   const [imageNegativePrompt, seImagetNegativePrompt] = useState<string | null>(null);
   const [imagePrompt, setImagePrompt] = useState<string | null>(null);
@@ -36,6 +41,19 @@ export const GeneratePostPage = () => {
 
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
   const [generatedText, setGeneratedText] = useState('');
+
+  useEffect(() => {
+    const title = location.state?.title;
+    const article = location.state?.article;
+
+    if (title && article) {
+      const customImagePrompt = getPromptFromArticle('image', title, article);
+      const customTextPrompt = getPromptFromArticle('text', title, article);
+
+      setImagePrompt(customImagePrompt);
+      setTextPrompt(customTextPrompt);
+    }
+  }, [location.state]);
 
   const handleImageStyleChange = (value: StyleItem | null) => {
     setImageStyle(value);
@@ -123,10 +141,8 @@ export const GeneratePostPage = () => {
 
   const showGenerationBlock = isTextLoading || isImageLoading || generatedText || generatedImageUrl;
 
-  console.log(isTextLoading);
-
   return (
-    <Layout className="container">
+    <Layout className={classNames('container', 'containerBlock')}>
       <Layout direction="column" className={styles.wrapper}>
         <Text view="brand" size="2xl" weight="bold" lineHeight="xs">
           Генерация поста с помощью ИИ
@@ -166,7 +182,7 @@ export const GeneratePostPage = () => {
               label="Промпт для изображения"
               placeholder="Подробное описание изображения"
               type="textarea"
-              cols={500}
+              cols={900}
               rows={10}
               value={imagePrompt}
               onChange={handleImagePromptChange}
@@ -178,7 +194,7 @@ export const GeneratePostPage = () => {
               label="Промпт для текста"
               placeholder="Подробное описание текста"
               type="textarea"
-              cols={500}
+              cols={4500}
               rows={10}
               value={textPrompt}
               onChange={handleTextPromptChange}

@@ -24,6 +24,7 @@
 
     "paths": {
       "app/*": ["app/*"],
+      "assets/*": ["assets/*"],
       "features/*": ["features/*"],
       "pages/*": ["pages/*"],
       "services/*": ["services/*"],

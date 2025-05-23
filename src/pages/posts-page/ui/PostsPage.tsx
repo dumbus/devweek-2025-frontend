@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import { Layout } from '@consta/uikit/Layout';
 
 import { generatePostListsData } from 'shared';
@@ -8,7 +10,7 @@ export const PostsPage = () => {
   const postsListData = generatePostListsData();
 
   return (
-    <Layout className="container">
+    <Layout className={classNames('container', 'containerBlock')}>
       <PostsList postsListData={postsListData} />
     </Layout>
   );

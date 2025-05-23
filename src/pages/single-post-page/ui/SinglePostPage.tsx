@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import classNames from 'classnames';
 
 import { Layout } from '@consta/uikit/Layout';
 import { useParams } from 'react-router-dom';
@@ -19,5 +20,5 @@ export const SinglePostPage = () => {
     setData(postData);
   }, [postId]);
 
-  return <Layout className="container">{data && <SinglePost data={data} />}</Layout>;
+  return <Layout className={classNames('container', 'containerBlock')}>{data && <SinglePost data={data} />}</Layout>;
 };
