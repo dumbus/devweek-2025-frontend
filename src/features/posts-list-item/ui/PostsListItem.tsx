@@ -4,6 +4,8 @@ import { Text } from '@consta/uikit/Text';
 
 import postImageTemplate from 'assets/postPreviewTemplate.png';
 
+import { dateFormatter } from 'shared';
+
 import { IPostsListItem } from '../model/types';
 
 import styles from './PostsListItem.module.scss';
@@ -28,7 +30,7 @@ export const PostsListItem = ({ postsListItemData, isDataLoading }: IPostsListIt
           </Text>
         )}
 
-        {isDataLoading ? <SkeletonText rows={1} fontSize="m" /> : <Text>{date}</Text>}
+        {isDataLoading ? <SkeletonText rows={1} fontSize="m" /> : <Text>{dateFormatter.format(date)}</Text>}
       </Layout>
     </Layout>
   );

@@ -47,7 +47,7 @@ export class PostsService {
       return {
         id: rawData.id,
         title: rawData.title,
-        date: rawData.date,
+        date: new Date(rawData.date),
         previewImageUrl: rawData.image_link,
         originLink: rawData.origin_link
       };
@@ -58,7 +58,7 @@ export class PostsService {
     return {
       id: rawSinglePostData.id,
       title: rawSinglePostData.title,
-      date: rawSinglePostData.date,
+      date: new Date(rawSinglePostData.date),
       description: rawSinglePostData.text,
       previewImageUrl: rawSinglePostData.image_link,
       sourceUrl: rawSinglePostData.origin_link,

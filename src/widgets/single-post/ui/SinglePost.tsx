@@ -17,6 +17,7 @@ import { CustomLoader } from 'features';
 import { PostsService } from 'services/PostsService';
 
 import { ErrorType, ISinglePostData } from 'shared';
+import { dateFormatter } from 'shared';
 // import { generateSinglePostData } from 'shared';
 
 import postImageTemplate from 'assets/postPreviewTemplate.png';
@@ -109,7 +110,7 @@ export const SinglePost = ({ postId }: ISinglePost) => {
 
               <Layout className={styles.post__date}>
                 <Text size="l">Дата публикации: </Text>
-                <Tag mode="info" size="l" label={postData.date} />
+                <Tag mode="info" size="l" label={dateFormatter.format(postData.date)} />
               </Layout>
 
               <Layout className={styles.post__source}>

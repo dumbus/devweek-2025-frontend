@@ -6,7 +6,7 @@ export interface IPostsListData {
 export interface IPostListItemData {
   id: number;
   title: string;
-  date: string;
+  date: Date;
   previewImageUrl: string;
   originLink: string;
 }
@@ -14,7 +14,7 @@ export interface IPostListItemData {
 export interface ISinglePostData {
   id: number;
   title: string;
-  date: string;
+  date: Date;
   tag: string;
   source: string;
   sourceUrl: string;

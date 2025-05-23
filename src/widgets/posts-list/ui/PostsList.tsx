@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Grid, GridItem } from '@consta/uikit/Grid';
 import { Layout } from '@consta/uikit/Layout';
+import { Pagination } from '@consta/uikit/Pagination';
+import { Text } from '@consta/uikit/Text';
 
 import { PostsService } from 'services/PostsService';
 
@@ -16,6 +18,7 @@ import styles from './PostsList.module.scss';
 export const PostsList = () => {
   const [listData, setListData] = useState<IPostListItemData[]>([]);
   const [totalPages, setTotalPages] = useState(0); // TODO: for pagination
+  const [page, setPage] = useState(1);
 
   // console.log(totalPages); // TODO: Убрать
 
@@ -24,10 +27,12 @@ export const PostsList = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    setIsDataLoading(true);
+
     const fetchPosts = async () => {
       try {
         const postsService = new PostsService();
-        const { data, totalPages } = await postsService.getPosts(1); // Начинаем с первой страницы
+        const { data, totalPages } = await postsService.getPosts(page); // Начинаем с первой страницы
 
         setListData(data);
         setTotalPages(totalPages);
@@ -64,7 +69,7 @@ export const PostsList = () => {
     //   .finally(() => {
     //     setIsDataLoading(false);
     //   });
-  }, []);
+  }, [page]);
 
   const hasContent = !isDataLoading && !error && listData && listData.length;
 
@@ -74,17 +79,34 @@ export const PostsList = () => {
       {error && <CustomError errorType={error} message={errorMessage} hasReturnButton={false} />}
 
       {hasContent && (
-        <Grid cols={3} gap="3xl" className={styles.grid}>
-          {listData.map((item) => {
-            return (
-              <Link to={`/posts/${item.id}`} key={item.id}>
-                <GridItem col={1}>
-                  <PostsListItem postsListItemData={item} isDataLoading={false} />
-                </GridItem>
-              </Link>
-            );
-          })}
-        </Grid>
+        <Layout direction="column" className={styles.list}>
+          <Text view="brand" size="3xl" weight="bold" lineHeight="xs">
+            Список актуальных новостей
+          </Text>
+
+          <Grid cols={3} gap="3xl" className={styles.grid}>
+            {listData.map((item) => {
+              return (
+                <Link to={`/posts/${item.id}`} key={item.id}>
+                  <GridItem col={1}>
+                    <PostsListItem postsListItemData={item} isDataLoading={false} />
+                  </GridItem>
+                </Link>
+              );
+            })}
+          </Grid>
+
+          <Pagination
+            className={styles.pagination}
+            value={page}
+            onChange={setPage}
+            items={totalPages}
+            size="l"
+            visibleCount={3}
+            showFirstPage
+            showLastPage
+          />
+        </Layout>
       )}
     </Layout>
   );
