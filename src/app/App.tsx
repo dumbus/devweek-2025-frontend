@@ -6,7 +6,6 @@ import { PostsPage, SinglePostPage, GeneratePostPage, HeaderPage } from 'pages';
 
 import 'styles/styles.scss';
 
-// TODO: Header with menu
 const App = () => {
   return (
     <Theme preset={presetGpnDefault}>

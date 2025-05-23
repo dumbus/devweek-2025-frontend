@@ -1,6 +1,6 @@
-import { IPostsListData, ISinglePostData } from 'shared/types';
+import { IPostsListData, ISinglePostData, IPostListItemData } from 'shared/types';
 
-const mockData = [
+const mockData: IPostListItemData[] = [
   {
     id: 1,
     title: 'Сборная модель: из чего складывается стоимость строительства и почему она растет',
@@ -143,11 +143,15 @@ const mockData = [
   }
 ];
 
-export const generatePostListsData = (): IPostsListData => {
-  return {
-    data: mockData,
-    totalResults: mockData.length
-  };
+export const generatePostListsData = (): Promise<IPostsListData> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        data: mockData,
+        totalResults: mockData.length
+      });
+    }, 2000);
+  });
 };
 
 export const generateSinglePostData = (id: number): ISinglePostData => {

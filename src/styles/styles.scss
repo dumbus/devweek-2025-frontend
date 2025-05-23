@@ -33,7 +33,7 @@ a {
   margin: 0 auto;
 
   &Block {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     margin-top: 64px;
     padding: 40px 0;
   }
