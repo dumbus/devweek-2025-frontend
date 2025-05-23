@@ -5,26 +5,22 @@ import classNames from 'classnames';
 import { Layout } from '@consta/uikit/Layout';
 import { useParams } from 'react-router-dom';
 
-import { generateSinglePostData } from 'shared';
-import { ISinglePostData } from 'shared';
 import { SinglePost } from 'widgets';
 
 export const SinglePostPage = () => {
   const navigate = useNavigate();
   const { id: postId } = useParams();
 
-  const [data, setData] = useState<ISinglePostData | null>(null);
+  const [currentId, setCurrentId] = useState('');
 
   useEffect(() => {
     const currentPostId = Number(postId);
+    setCurrentId(postId || '');
 
-    if (isNaN(currentPostId)) {
+    if (!currentPostId || isNaN(currentPostId)) {
       navigate('/404');
-    } else {
-      const postData = generateSinglePostData(currentPostId);
-      setData(postData);
     }
   }, [postId, navigate]);
 
-  return <Layout className={classNames('container', 'containerBlock')}>{data && <SinglePost data={data} />}</Layout>;
+  return <Layout className={classNames('container', 'containerBlock')}>{<SinglePost postId={currentId} />}</Layout>;
 };
