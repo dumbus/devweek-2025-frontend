@@ -192,9 +192,9 @@ export const GeneratePostPage = () => {
   );
 
   return (
-    <Layout className={classNames('container', 'containerBlock')}>
+    <Layout className={classNames('container', 'containerBlock', styles.topWrapper)}>
       <Layout direction="column" className={styles.wrapper}>
-        <Text view="brand" size="2xl" weight="bold" lineHeight="xs">
+        <Text view="brand" size="2xl" weight="bold" lineHeight="xs" className={styles.title}>
           Генерация поста с помощью ИИ
         </Text>
 
@@ -206,6 +206,7 @@ export const GeneratePostPage = () => {
                 items={IMAGE_STYLES}
                 value={imageStyle}
                 onChange={handleImageStyleChange}
+                className={styles.input}
               />
 
               <TextField
@@ -215,6 +216,7 @@ export const GeneratePostPage = () => {
                 maxLength={50}
                 value={imageNegativePrompt}
                 onChange={handleImageNegativePromptChange}
+                className={styles.input}
               />
             </Layout>
 

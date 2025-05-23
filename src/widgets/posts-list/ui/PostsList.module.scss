@@ -13,3 +13,23 @@
 .pagination {
   justify-content: center;
 }
+
+@media (max-width: 992px) {
+  .list {
+    gap: 24px;
+
+    &__title {
+      font-size: 28px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .list {
+    gap: 16px;
+
+    &__title {
+      font-size: 24px;
+    }
+  }
+}

@@ -8,6 +8,7 @@
   padding: 8px;
   background-color: $primary-color;
   z-index: 100;
+  align-items: center;
 }
 
 .header {
@@ -16,6 +17,11 @@
 
   &__menu {
     gap: 16px;
+
+    &Mobile {
+      display: none;
+      gap: 8px;
+    }
   }
 
   &__button {
@@ -34,5 +40,25 @@
     &:active {
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) !important; // Перебиваю стили консты
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .header__menu {
+    display: none;
+
+    &Mobile {
+      display: flex;
+    }
+  }
+
+  .header__buttonLogo {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .header__buttonLogo {
+    display: none;
   }
 }

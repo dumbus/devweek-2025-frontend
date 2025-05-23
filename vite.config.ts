@@ -1,33 +1,33 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+// import fs from 'fs';
+// import { fileURLToPath } from 'url';
+// import { dirname, resolve } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
-export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
+export default defineConfig(() => {
+  // const isDev = mode === 'development';
 
   return {
     base: '/',
-    server: {
-      ...(isDev && {
-        https: {
-          key: fs.readFileSync(resolve(__dirname, 'localhost-key.pem')),
-          cert: fs.readFileSync(resolve(__dirname, 'localhost.pem'))
-        }
-      }),
-      proxy: {
-        '/api': {
-          target: 'https://91.142.79.127',
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
-    },
+    // server: {
+    //   ...(isDev && {
+    //     https: {
+    //       key: fs.readFileSync(resolve(__dirname, 'localhost-key.pem')),
+    //       cert: fs.readFileSync(resolve(__dirname, 'localhost.pem'))
+    //     }
+    //   }),
+    //   proxy: {
+    //     '/api': {
+    //       target: 'https://91.142.79.127',
+    //       changeOrigin: true,
+    //       secure: false,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // },
     plugins: [react()],
     resolve: {
       alias: {

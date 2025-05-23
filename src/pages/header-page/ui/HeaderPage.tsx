@@ -32,6 +32,16 @@ export const HeaderPage = () => {
             <Button label="Генерация" className={styles.header__button} view="secondary" iconLeft={IconEdit} />
           </Link>
         </Layout>
+
+        <Layout className={styles.header__menuMobile}>
+          <Link to="/posts">
+            <Button label="Главная" className={styles.header__button} view="secondary" iconLeft={IconHome} onlyIcon />
+          </Link>
+
+          <Link to="/posts/generation">
+            <Button label="Генерация" className={styles.header__button} view="secondary" iconLeft={IconEdit} onlyIcon />
+          </Link>
+        </Layout>
       </Layout>
     </Layout>
   );

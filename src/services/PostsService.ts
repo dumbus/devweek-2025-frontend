@@ -6,8 +6,9 @@ export class PostsService {
   private _fetchOptions: RequestInit;
 
   constructor() {
-    const isDev = import.meta.env.MODE === 'development';
-    this._apiBaseUrl = isDev ? '/api/posts' : 'https://91.142.79.127/posts';
+    // const isDev = import.meta.env.MODE === 'development';
+    // this._apiBaseUrl = isDev ? '/api/posts' : 'https://91.142.79.127/posts';
+    this._apiBaseUrl = 'https://devweek-2025.ru/posts';
     this._fetchOptions = {
       method: 'GET'
     };

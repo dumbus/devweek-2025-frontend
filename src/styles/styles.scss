@@ -38,3 +38,43 @@ a {
     padding: 40px 0;
   }
 }
+
+@media (max-width: 1200px) {
+  .container {
+    width: 960px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    width: 720px;
+    padding: 30px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 540px;
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    width: 380px;
+  }
+
+  .TextField-Label_labelPosition_top {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    width: 300px;
+  }
+
+  .TextField-Label_labelPosition_top {
+    font-size: 15px !important;
+  }
+}

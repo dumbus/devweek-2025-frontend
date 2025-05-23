@@ -1,10 +1,11 @@
+import classNames from 'classnames';
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IconBackward } from '@consta/icons/IconBackward';
 import { IconOpenInNew } from '@consta/icons/IconOpenInNew';
 
-import { Badge } from '@consta/uikit/Badge';
 import { Button } from '@consta/uikit/Button';
 import { Grid, GridItem } from '@consta/uikit/Grid';
 import { Layout } from '@consta/uikit/Layout';
@@ -18,7 +19,6 @@ import { PostsService } from 'services/PostsService';
 
 import { ErrorType, ISinglePostData } from 'shared';
 import { dateFormatter } from 'shared';
-// import { generateSinglePostData } from 'shared';
 
 import postImageTemplate from 'assets/postPreviewTemplate.png';
 
@@ -42,7 +42,7 @@ export const SinglePost = ({ postId }: ISinglePost) => {
           const id = Number(postId);
 
           const postsService = new PostsService();
-          const data = await postsService.getPostById(id); // Начинаем с первой страницы
+          const data = await postsService.getPostById(id);
 
           setPostData(data);
 
@@ -60,29 +60,12 @@ export const SinglePost = ({ postId }: ISinglePost) => {
 
       fetchPost();
     }
-
-    // generateSinglePostData(postId)
-    //   .then((data) => {
-    //     setPostData(data);
-    //     if (!data) {
-    //       setError('empty-data');
-    //       setErrorMessage(null);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setError('default');
-    //     setErrorMessage(err.message || 'Ошибка при загрузке данных');
-    //     setPostData(null);
-    //   })
-    //   .finally(() => {
-    //     setIsDataLoading(false);
-    //   });
   }, [postId]);
 
   const hasContent = !isDataLoading && !error && postData;
 
   return (
-    <Layout className="container">
+    <Layout className={classNames('container', styles.wrapper)}>
       {isDataLoading && <CustomLoader />}
       {error && <CustomError errorType={error} message={errorMessage} hasReturnButton />}
 
@@ -97,16 +80,15 @@ export const SinglePost = ({ postId }: ISinglePost) => {
           </GridItem>
 
           <GridItem col={3} className={styles.post__info}>
-            <Text view="brand" size="2xl" weight="bold" lineHeight="xs">
+            <Text view="brand" size="2xl" weight="bold" lineHeight="xs" className={styles.post__title}>
               {postData.title}
             </Text>
 
             <Layout direction="column" className={styles.post__infoAbout}>
-              <Layout className={styles.post__tag}>
+              {/* <Layout className={styles.post__tag}>
                 <Text size="l">Тег новости: </Text>
                 <Badge status="system" size="m" label={postData.tag} />
-                {/* TODO: Функция для определения status по тегу */}
-              </Layout>
+              </Layout> */}
 
               <Layout className={styles.post__date}>
                 <Text size="l">Дата публикации: </Text>
@@ -128,7 +110,7 @@ export const SinglePost = ({ postId }: ISinglePost) => {
               </Layout>
             </Layout>
 
-            <Layout className={styles.post__buttons}>
+            <Layout direction="column" className={styles.post__buttons}>
               <Button
                 className={styles.post__button}
                 label="Вернуться на главную"
