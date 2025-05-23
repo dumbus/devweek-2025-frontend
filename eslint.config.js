@@ -22,7 +22,10 @@ export default [
       globals: {
         window: 'readonly',
         document: 'readonly',
-        console: 'readonly'
+        console: 'readonly',
+        fetch: 'readonly',
+        alert: 'readonly',
+        setTimeout: 'readonly'
       },
       ecmaVersion: 2021
     }

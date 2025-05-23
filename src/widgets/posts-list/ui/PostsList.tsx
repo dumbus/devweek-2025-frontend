@@ -8,8 +8,6 @@ import { IPostsList } from '../model/types';
 
 import styles from './PostsList.module.scss';
 
-// TODO: Button "Generate" -> Open Page with generation settings and results
-// TODO: Loader & Error Handling
 export const PostsList = ({ postsListData }: IPostsList) => {
   const { data } = postsListData;
 

@@ -1,5 +1,5 @@
 import { IOpenRouterModel, IOpenRouterRequest, IOpenRouterResponse } from 'shared';
-import { getPromptFromArticle } from 'shared';
+import { getSafePrompt } from 'shared';
 
 export class OpenRouterTextService {
   private static readonly BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -19,15 +19,14 @@ export class OpenRouterTextService {
     this.siteName = siteName;
   }
 
-  public async generateTextFromDescription(article: string): Promise<string> {
-    const response = await this.getResponse(article);
+  public async generateTextFromPrompt(userPrompt: string): Promise<string> {
+    const prompt = getSafePrompt('text', userPrompt);
+    const response = await this.getResponse(prompt);
 
     return this.extractMessageContent(response);
   }
 
-  private async getResponse(article: string): Promise<IOpenRouterResponse> {
-    const prompt = getPromptFromArticle('text', article);
-
+  private async getResponse(prompt: string): Promise<IOpenRouterResponse> {
     for (const model of OpenRouterTextService.MODELS) {
       try {
         const response = await this.tryGetResponseWithModel(prompt, model);

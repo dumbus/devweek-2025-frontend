@@ -1,4 +1,5 @@
-import { getPromptFromArticle } from 'shared';
+import { getSafePrompt } from 'shared';
+import { StyleType } from 'shared';
 import { IFusionBrainGenerationResult } from 'shared';
 
 // TODO: Обработать случаи, когда сервис недоступен (возвращает pipeline_status вместо uuid)
@@ -14,12 +15,16 @@ export class FusionBrainService {
     this.secretKey = secretKey;
   }
 
-  public async generateImageByDescription(article: string): Promise<IFusionBrainGenerationResult> {
+  public async generateImageByPrompt(
+    userPrompt: string,
+    userNegativePrompt: string | null,
+    userStyle?: StyleType
+  ): Promise<IFusionBrainGenerationResult> {
     if (!this.pipelineId) {
       this.pipelineId = await this.getPipelineId();
     }
 
-    const prompt = getPromptFromArticle('image', article);
+    const prompt = getSafePrompt('image', userPrompt);
 
     const formData = new FormData();
     formData.append(
@@ -28,9 +33,11 @@ export class FusionBrainService {
         [
           JSON.stringify({
             type: 'GENERATE',
+            style: userStyle || 'DEFAULT',
             width: 1024,
             height: 1024,
             numImages: 1,
+            negativePromptDecoder: userNegativePrompt || '',
             generateParams: { query: prompt }
           })
         ],
