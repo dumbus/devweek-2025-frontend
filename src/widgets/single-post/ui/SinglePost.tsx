@@ -14,8 +14,10 @@ import { Text } from '@consta/uikit/Text';
 import { CustomError } from 'features';
 import { CustomLoader } from 'features';
 
+import { PostsService } from 'services/PostsService';
+
 import { ErrorType, ISinglePostData } from 'shared';
-import { generateSinglePostData } from 'shared';
+// import { generateSinglePostData } from 'shared';
 
 import { ISinglePost } from '../model/types';
 
@@ -31,23 +33,45 @@ export const SinglePost = ({ postId }: ISinglePost) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    generateSinglePostData(postId)
-      .then((data) => {
+    const fetchPost = async () => {
+      try {
+        const id = Number(postId);
+
+        const postsService = new PostsService();
+        const data = await postsService.getPostById(id); // Начинаем с первой страницы
+
         setPostData(data);
 
         if (!data) {
           setError('empty-data');
-          setErrorMessage(null);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         setError('default');
-        setErrorMessage(err.message || 'Ошибка при загрузке данных');
+        setErrorMessage(err instanceof Error ? err.message : 'Ошибка при загрузке данных');
         setPostData(null);
-      })
-      .finally(() => {
+      } finally {
         setIsDataLoading(false);
-      });
+      }
+    };
+
+    fetchPost();
+
+    // generateSinglePostData(postId)
+    //   .then((data) => {
+    //     setPostData(data);
+    //     if (!data) {
+    //       setError('empty-data');
+    //       setErrorMessage(null);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setError('default');
+    //     setErrorMessage(err.message || 'Ошибка при загрузке данных');
+    //     setPostData(null);
+    //   })
+    //   .finally(() => {
+    //     setIsDataLoading(false);
+    //   });
   }, [postId]);
 
   const hasContent = !isDataLoading && !error && postData;

@@ -1,6 +1,6 @@
 export interface IPostsListData {
   data: IPostListItemData[];
-  totalResults: number;
+  totalPages: number;
 }
 
 export interface IPostListItemData {
@@ -8,6 +8,7 @@ export interface IPostListItemData {
   title: string;
   date: string;
   previewImageUrl: string;
+  originLink: string;
 }
 
 export interface ISinglePostData {
