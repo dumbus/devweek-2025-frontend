@@ -1,7 +1,7 @@
 import { getSafePrompt } from 'shared';
 
 export interface IStableCogGenerationResult {
-  imageBase64: string; 
+  imageBase64: string;
   remainingCredits?: number; //Оставшееся количество генераций (кредитов)
 }
 
@@ -28,7 +28,7 @@ export class StableCogService {
       negative_prompt: userNegativePrompt,
       width,
       height,
-      num_outputs: numOutputs,
+      num_outputs: numOutputs
     };
 
     const response = await fetch(StableCogService.BASE_URL, {
@@ -52,16 +52,17 @@ export class StableCogService {
     const base64 = await this.convertBlobToBase64(imageBlob);
 
     return {
-      imageBase64: base64,
+      imageBase64: base64
       // remainingCredits: data.remaining_credits ?? undefined
     };
   }
-//Метод преобразования ибо делал компоненту по примеру но в FusionBrain сразу приходит base64 а тут нет
-//Хз, в доках не нашёл как получить сразу base64, и дипсись ответил мне также
-// поэтому сначала делаем fetch по imageUrl, чтобы получить Blob,
-// а потом конвертируем Blob в base64 через FileReader.
-// Я люблю капусту
-private async convertBlobToBase64(blob: Blob): Promise<string> {
+
+  //Метод преобразования ибо делал компоненту по примеру но в FusionBrain сразу приходит base64 а тут нет
+  //Хз, в доках не нашёл как получить сразу base64, и дипсись ответил мне также
+  // поэтому сначала делаем fetch по imageUrl, чтобы получить Blob,
+  // а потом конвертируем Blob в base64 через FileReader.
+  // Я люблю капусту
+  private async convertBlobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result as string);
