@@ -24,7 +24,6 @@
 }
 
 .button {
-  margin-top: 16px;
   width: 240px;
 
   &_centered {
@@ -47,5 +46,14 @@
 
   &__side {
     width: 100%;
+    gap: 16px;
+  }
+
+  &__buttons {
+    gap: 16px;
+  }
+
+  &__text {
+    white-space: pre-wrap;
   }
 }

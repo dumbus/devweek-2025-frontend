@@ -235,11 +235,8 @@ export const GeneratePostPage = () => {
               )}
 
               <Layout direction="column" className={styles.generation__side}>
-                {generatedText && <Text size="l">{generatedText}</Text>}
-                {isTextLoading && !generatedText && <SkeletonText rows={5} fontSize="xl" lineHeight="xs" />}
-
                 {isContentGenerated && (
-                  <>
+                  <Layout className={styles.generation__buttons}>
                     <Button
                       className={classNames(styles.button, styles.button_wide)}
                       label="Перегенерировать пост"
@@ -258,8 +255,15 @@ export const GeneratePostPage = () => {
                         handleDownload(generatedImageUrl);
                       }}
                     />
-                  </>
+                  </Layout>
                 )}
+
+                {generatedText && (
+                  <Text className={styles.generation__text} size="l">
+                    {generatedText}
+                  </Text>
+                )}
+                {isTextLoading && !generatedText && <SkeletonText rows={5} fontSize="xl" lineHeight="xs" />}
               </Layout>
             </Layout>
           </>
