@@ -61,7 +61,7 @@ export class PostsService {
       description: rawSinglePostData.text,
       previewImageUrl: rawSinglePostData.image_link,
       sourceUrl: rawSinglePostData.origin_link,
-      source: rawSinglePostData.author,
+      source: rawSinglePostData.author === 'unknown' ? 'Фонтанка.РУ' : rawSinglePostData.author,
       tag: 'Аналитика' // TODO: Получить с сервера актуальные, сейчас хардкод
     };
   };
