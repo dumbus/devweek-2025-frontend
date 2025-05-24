@@ -85,14 +85,7 @@ export const GeneratePostPage = () => {
       setIsTextPromptAlert(false);
 
       try {
-        const openRouterTextService = new OpenRouterTextService(
-          import.meta.env.VITE_OPENROUTER_AUTH_KEY,
-          window.location.href,
-          'devweeks-2025'
-        );
-
-        const result = await openRouterTextService.generateTextFromPrompt(textPrompt);
-
+        const result = await generateTextWithFallback(textPrompt);
         setGeneratedText(result);
       } catch {
         setError('generation-error');
@@ -113,7 +106,7 @@ export const GeneratePostPage = () => {
     resetGenerationState();
 
     try {
-      await generateWithFallback();
+      await generateImageWithFallback();
     } catch {
       setError('generation-error');
     } finally {
@@ -156,12 +149,50 @@ export const GeneratePostPage = () => {
     setGeneratedImageUrl(imageBase64);
   };
 
-  // Function to call image generation functions with Fallback
-  const generateWithFallback = async () => {
+  // Functions to generate text with different API keys
+
+  const generateTextWithMainKey = async (prompt: string) => {
+    const openRouterTextService = new OpenRouterTextService(
+      import.meta.env.VITE_OPENROUTER_AUTH_KEY_MAIN,
+      window.location.href,
+      'devweek-2025-new'
+    );
+
+    return await openRouterTextService.generateTextFromPrompt(prompt);
+  };
+
+  const generateTextWithFallbackKey = async (prompt: string) => {
+    const openRouterTextService = new OpenRouterTextService(
+      import.meta.env.VITE_OPENROUTER_AUTH_KEY_FALLBACK,
+      window.location.href,
+      'devweek-2025'
+    );
+
+    return await openRouterTextService.generateTextFromPrompt(prompt);
+  };
+
+  // Functions to call content generation functions with Fallback
+
+  const generateImageWithFallback = async () => {
     try {
       await generateWithFusionBrain();
     } catch {
       await generateWithStableCog();
+    }
+  };
+
+  const generateTextWithFallback = async (prompt: string) => {
+    try {
+      return await generateTextWithMainKey(prompt);
+    } catch (error) {
+      console.error('Error with main key:', error);
+
+      try {
+        return await generateTextWithFallbackKey(prompt);
+      } catch (error) {
+        console.error('Error with fallback key:', error);
+        throw new Error('Both keys failed');
+      }
     }
   };
 
