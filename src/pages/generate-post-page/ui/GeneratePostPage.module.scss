@@ -1,0 +1,119 @@
+.wrapper {
+  gap: 16px;
+}
+
+.settings {
+  gap: 16px;
+}
+
+.imageSettings {
+  gap: 32px;
+
+  &__inputs {
+    width: 400px;
+    gap: 16px;
+  }
+
+  &__preview {
+    gap: 8px;
+  }
+}
+
+.textFieldSettings {
+  gap: 32px;
+}
+
+.button {
+  width: 240px;
+
+  &_centered {
+    align-self: center;
+  }
+
+  &_wide {
+    width: 280px;
+  }
+}
+
+.generation {
+  gap: 32px;
+
+  &__image {
+    width: 500px;
+    height: 500px;
+    flex-shrink: 0;
+  }
+
+  &__side {
+    width: 100%;
+    gap: 16px;
+  }
+
+  &__buttons {
+    gap: 16px;
+  }
+
+  &__text {
+    white-space: pre-wrap;
+  }
+}
+
+@media (max-width: 992px) {
+  .imageSettings {
+    flex-direction: column;
+  }
+
+  .generation {
+    &__image {
+      width: 360px;
+      height: 360px;
+    }
+
+    &__buttons {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .topWrapper {
+    flex-direction: column;
+  }
+
+  .imageSettings {
+    flex-direction: column;
+  }
+
+  .generation {
+    flex-direction: column;
+
+    &__image {
+      width: 360px !important;
+      height: 360px !important;
+    }
+
+    &__buttons {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .imageSettings__inputs {
+    width: 300px;
+  }
+
+  .generation {
+    gap: 16px;
+    justify-content: center;
+
+    &__image {
+      width: 300px !important;
+      height: 300px !important;
+    }
+  }
+}

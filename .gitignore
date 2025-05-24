@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+dist.zip
 dist-ssr
 *.local
 
@@ -26,3 +27,8 @@ dist-ssr
 
 # Lock files
 *-lock.json
+
+.env
+
+localhost-key.pem
+localhost.pem
