@@ -18,4 +18,5 @@ export interface IRawSinglePostData {
   image_link: string;
   origin_link: string;
   text: string;
+  author: string;
 }

@@ -6,8 +6,6 @@ export class PostsService {
   private _fetchOptions: RequestInit;
 
   constructor() {
-    // const isDev = import.meta.env.MODE === 'development';
-    // this._apiBaseUrl = isDev ? '/api/posts' : 'https://91.142.79.127/posts';
     this._apiBaseUrl = 'https://devweek-2025.ru/posts';
     this._fetchOptions = {
       method: 'GET'
@@ -63,7 +61,7 @@ export class PostsService {
       description: rawSinglePostData.text,
       previewImageUrl: rawSinglePostData.image_link,
       sourceUrl: rawSinglePostData.origin_link,
-      source: 'Фонтанка.ру', // TODO: Получить с сервера актуальные, сейчас хардкод
+      source: rawSinglePostData.author,
       tag: 'Аналитика' // TODO: Получить с сервера актуальные, сейчас хардкод
     };
   };
