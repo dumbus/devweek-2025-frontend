@@ -1,25 +1,51 @@
 import { IRawPostsListData, IRawPostsListItemData, IRawSinglePostData } from 'shared';
 import { IPostsListData, IPostListItemData, ISinglePostData } from 'shared';
 
+import { REQUEST_TIMEOUT } from 'shared';
+
 export class PostsService {
   private _apiBaseUrl: string;
   private _fetchOptions: RequestInit;
+  private _timeout: number;
 
   constructor() {
     this._apiBaseUrl = 'https://devweek-2025.ru/posts';
     this._fetchOptions = {
       method: 'GET'
     };
+    this._timeout = REQUEST_TIMEOUT;
   }
 
   getResource = async (url: string) => {
-    const response = await fetch(url, this._fetchOptions);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this._timeout);
 
-    if (!response.ok) {
-      throw new Error(`Could not fetch ${url}, status: ${response.status}`);
+    try {
+      const response = await fetch(url, {
+        ...this._fetchOptions,
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`Could not fetch ${url}, status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          throw new Error(`Request timeout exceeded ${this._timeout}ms`);
+        }
+
+        throw new Error(`Could not fetch ${url}, error: ${error.message}`);
+      }
+
+      throw new Error(`Unknown error occurred while fetching ${url}`);
     }
-
-    return await response.json();
   };
 
   getPosts = async (page: number): Promise<IPostsListData> => {

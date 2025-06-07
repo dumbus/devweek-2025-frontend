@@ -26,13 +26,15 @@ export const PostsList = () => {
   const [usingMockData, setUsingMockData] = useState(false);
 
   useEffect(() => {
-    setIsDataLoading(true);
-    setError(null);
-    setErrorMessage(null);
-
     const fetchPosts = async () => {
+      setIsDataLoading(true);
+      setError(null);
+      setErrorMessage(null);
+
+      let apiError: Error | null = null;
+
+      // Try to get posts data from real API
       try {
-        // Try to get posts data from real API
         const postsService = new PostsService();
         const { data, totalPages } = await postsService.getPosts(page);
 
@@ -43,36 +45,43 @@ export const PostsList = () => {
         if (!data.length) {
           setError('empty-data');
         }
+
+        return; // successful request, return to main flow
       } catch (error) {
-        // If real API is unavailable, get mock data
-        try {
-          const { data, totalPages } = await generatePostListsData(page);
+        apiError = error instanceof Error ? error : new Error(String(error));
+      }
 
-          setListData(data);
-          setTotalPages(totalPages);
-          setUsingMockData(true);
+      // If real API is unavailable, get mock data
+      try {
+        const { data, totalPages } = await generatePostListsData(page);
 
-          if (!data.length) {
-            setError('empty-data');
-          } else {
-            setError(null);
-          }
-        } catch {
-          setError('default');
-          setErrorMessage(
-            error instanceof Error
-              ? `${error.message} (используются тестовые данные)`
-              : 'Ошибка при загрузке данных (используются тестовые данные)'
-          );
-          setListData([]);
-          setUsingMockData(false);
+        setListData(data);
+        setTotalPages(totalPages);
+        setUsingMockData(true);
+
+        if (!data.length) {
+          setError('empty-data');
         }
-      } finally {
-        setIsDataLoading(false);
+      } catch {
+        setError('default');
+        setErrorMessage(
+          apiError instanceof Error
+            ? `${apiError.message}. Тестовые данные недоступны`
+            : 'Ошибка при загрузке данных. Тестовые данные недоступны'
+        );
+        setListData([]);
+        setUsingMockData(false);
       }
     };
 
-    fetchPosts();
+    fetchPosts()
+      .catch(() => {
+        setError('default');
+        setErrorMessage('Неизвестная ошибка при загрузке данных');
+      })
+      .finally(() => {
+        setIsDataLoading(false);
+      });
   }, [page]);
 
   const hasContent = !isDataLoading && !error && listData && listData.length;

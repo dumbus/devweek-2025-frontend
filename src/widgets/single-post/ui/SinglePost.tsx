@@ -41,47 +41,61 @@ export const SinglePost = ({ postId }: ISinglePost) => {
   useEffect(() => {
     if (postId) {
       const fetchPost = async () => {
+        setIsDataLoading(true);
+        setError(null);
+        setErrorMessage(null);
+        setUsingMockData(false);
+
         const id = Number(postId);
+        let apiError: Error | null = null;
 
         // Try to get posts data from real API
         try {
           const postsService = new PostsService();
           const data = await postsService.getPostById(id);
 
+          console.log(data);
+
           setPostData(data);
 
           if (!data) {
             setError('empty-data');
           }
+
+          return; // successful request, return to main flow
         } catch (error) {
-          // If real API is unavailable, get mock data
-          try {
-            const mockData = await generateSinglePostData(id);
+          apiError = error instanceof Error ? error : new Error(String(error));
+        }
 
-            setPostData(mockData);
-            setUsingMockData(true);
+        // If real API is unavailable, get mock data
+        try {
+          const mockData = await generateSinglePostData(id);
 
-            if (!mockData) {
-              setError('empty-data');
-            } else {
-              setError(null);
-            }
-          } catch {
-            setError('default');
-            setErrorMessage(
-              error instanceof Error
-                ? `${error.message} (используются тестовые данные)`
-                : 'Ошибка при загрузке данных (используются тестовые данные)'
-            );
-            setPostData(null);
-            setUsingMockData(false);
+          setPostData(mockData);
+          setUsingMockData(true);
+
+          if (!mockData) {
+            setError('empty-data');
           }
-        } finally {
-          setIsDataLoading(false);
+        } catch {
+          setError('default');
+          setErrorMessage(
+            apiError
+              ? `${apiError.message}. Тестовые данные недоступны`
+              : 'Ошибка при загрузке данных. Тестовые данные недоступны'
+          );
+          setPostData(null);
         }
       };
 
-      fetchPost();
+      fetchPost()
+        .catch(() => {
+          setError('default');
+          setErrorMessage('Неизвестная ошибка при загрузке данных');
+        })
+        .finally(() => {
+          setIsDataLoading(false);
+        });
     }
   }, [postId]);
 
