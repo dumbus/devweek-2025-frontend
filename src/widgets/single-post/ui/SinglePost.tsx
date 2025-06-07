@@ -26,6 +26,8 @@ import { ISinglePost } from '../model/types';
 
 import styles from './SinglePost.module.scss';
 
+import { generateSinglePostData } from 'shared';
+
 export const SinglePost = ({ postId }: ISinglePost) => {
   const navigate = useNavigate();
 
@@ -34,13 +36,15 @@ export const SinglePost = ({ postId }: ISinglePost) => {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [error, setError] = useState<ErrorType | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [usingMockData, setUsingMockData] = useState(false);
 
   useEffect(() => {
     if (postId) {
       const fetchPost = async () => {
-        try {
-          const id = Number(postId);
+        const id = Number(postId);
 
+        // Try to get posts data from real API
+        try {
           const postsService = new PostsService();
           const data = await postsService.getPostById(id);
 
@@ -49,10 +53,29 @@ export const SinglePost = ({ postId }: ISinglePost) => {
           if (!data) {
             setError('empty-data');
           }
-        } catch (err) {
-          setError('default');
-          setErrorMessage(err instanceof Error ? err.message : 'Ошибка при загрузке данных');
-          setPostData(null);
+        } catch (error) {
+          // If real API is unavailable, get mock data
+          try {
+            const mockData = await generateSinglePostData(id);
+
+            setPostData(mockData);
+            setUsingMockData(true);
+
+            if (!mockData) {
+              setError('empty-data');
+            } else {
+              setError(null);
+            }
+          } catch {
+            setError('default');
+            setErrorMessage(
+              error instanceof Error
+                ? `${error.message} (используются тестовые данные)`
+                : 'Ошибка при загрузке данных (используются тестовые данные)'
+            );
+            setPostData(null);
+            setUsingMockData(false);
+          }
         } finally {
           setIsDataLoading(false);
         }
@@ -71,6 +94,14 @@ export const SinglePost = ({ postId }: ISinglePost) => {
 
       {hasContent && (
         <Grid cols={5} colGap="2xl" rowGap="xl" className={styles.post}>
+          {usingMockData && (
+            <GridItem col={5}>
+              <Text view="warning" size="m">
+                Внимание: используются тестовые данные, так как сервер недоступен
+              </Text>
+            </GridItem>
+          )}
+
           <GridItem col={2}>
             <img
               className={styles.post__image}

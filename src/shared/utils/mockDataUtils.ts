@@ -1,5 +1,8 @@
 import { IPostsListData, ISinglePostData, IPostListItemData } from 'shared/types';
 
+import { NEWS_PER_PAGE } from 'shared/constants';
+
+// TODO: Обновить моковые данные, чтобы они выглядели более актуальными
 const mockData: IPostListItemData[] = [
   {
     id: 1,
@@ -163,18 +166,25 @@ const mockData: IPostListItemData[] = [
   }
 ];
 
-export const generatePostListsData = (): Promise<IPostsListData> => {
+export const generatePostListsData = (page: number): Promise<IPostsListData> => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const startIndex = (page - 1) * NEWS_PER_PAGE;
+      const endIndex = startIndex + NEWS_PER_PAGE;
+
+      const paginatedData = mockData.slice(startIndex, endIndex);
+
+      const totalPaginatedPages = Math.ceil(mockData.length / NEWS_PER_PAGE);
+
       resolve({
-        data: mockData,
-        totalPages: mockData.length
+        data: paginatedData,
+        totalPages: totalPaginatedPages
       });
     }, 2000);
   });
 };
 
-export const generateSinglePostData = (id: string): Promise<ISinglePostData> => {
+export const generateSinglePostData = (id: string | number): Promise<ISinglePostData> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const numberId = Number(id);
