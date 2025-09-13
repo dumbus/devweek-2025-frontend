@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: '/',
+    base: '/devweek-2025-frontend',
     plugins: [react()],
     resolve: {
       alias: {
