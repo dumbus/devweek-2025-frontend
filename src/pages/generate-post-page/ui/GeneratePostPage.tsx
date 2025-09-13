@@ -346,9 +346,15 @@ export const GeneratePostPage = () => {
                     )}
 
                     {generatedText && (
-                      <Text className={styles.generation__text} size="l">
-                        {generatedText}
-                      </Text>
+                      <>
+                        <Text className={styles.generation__text} size="l">
+                          {generatedText}
+                        </Text>
+
+                        <Text view="alert" size="m">
+                          Не забудьте упомянуть, что контент сгенерирован с помощью ИИ!
+                        </Text>
+                      </>
                     )}
                     {isTextLoading && !generatedText && <SkeletonText rows={5} fontSize="xl" lineHeight="xs" />}
                   </Layout>
