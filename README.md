@@ -3,8 +3,8 @@
 ![react version](https://img.shields.io/badge/react-19.1.0-blue)
 ![react-router-dom version](https://img.shields.io/badge/react--router--dom-7.6.0-blue)
 ![sass version](https://img.shields.io/badge/sass-1.89.0-blue)
-![consta-uikit version](https://img.shields.io/badge/consta-uikit-5.19.2-blue)
-![consta-icons version](https://img.shields.io/badge/consta-icons-1.1.0-blue)
+![consta-uikit version](https://img.shields.io/badge/consta--uikit-5.19.2-blue)
+![consta-icons version](https://img.shields.io/badge/consta--icons-1.1.0-blue)
 ![eslint version](https://img.shields.io/badge/eslint-9.6.1-brightgreen)
 ![prettier version](https://img.shields.io/badge/prettier-3.5.3-brightgreen)
 ![vite version](https://img.shields.io/badge/vite-6.3.5-brightgreen)
@@ -33,7 +33,7 @@
 
 > На данный момент работа backend-сервисов проекта приостановлена
 
-- Раз в несколько часов запускаются парсеры следующих новостных ресурсов: [Фонтанка](https://www.fontanka.ru/), [Самолет](https://samolet.ru/spb/news/?utm_referrer=https%3A%2F%2Fwww.google.com%2F), [Недвижимость и строительство Петербурга](https://nsp.ru/).
+- Раз в несколько часов запускаются парсеры следующих новостных ресурсов: [Фонтанка](https://www.fontanka.ru/realty/), [Самолет](https://samolet.ru/spb/news/?utm_referrer=https%3A%2F%2Fwww.google.com%2F), [Недвижимость и строительство Петербурга](https://nsp.ru/analitika).
 - Парсеры извлекают основную информацию о новостях, готовят краткую выжимку с помощью обращения к нейросетевым агентам (`deepseek`, `gemma`, `llama`) с помощью OpenRouter и сохраняют записи о полученных новостях в базу данных.
 - Развёрнут сервис, предоставляющий API, к которому в дальнейшем обращается frontend-часть приложения (Развёрнуто по адресу `https://devweek-2025.ru/posts`, но на данный момент работа приостановлена).
 
@@ -68,7 +68,17 @@
 
 ### Скриншоты приложения
 
-> TODO: Добавить скриншоты
+1. Главная страница
+
+<img width="1918" height="953" alt="posts-list" src="https://github.com/user-attachments/assets/39859b60-2777-43cd-a073-6dd31d591c6f" />
+
+2. Страница отдельной новости
+
+<img width="1920" height="946" alt="single-post" src="https://github.com/user-attachments/assets/263f99dd-4582-412d-b6b3-c72507015cd1" />
+
+3. Страница генерации поста для социальной сети
+
+<img width="1916" height="981" alt="generated-post" src="https://github.com/user-attachments/assets/4adedf8a-aac1-4722-a4b6-27fc07087f88" />
 
 ### Команда проекта
 
