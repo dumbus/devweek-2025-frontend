@@ -26,6 +26,8 @@ import { ISinglePost } from '../model/types';
 
 import styles from './SinglePost.module.scss';
 
+import { generateSinglePostData } from 'shared';
+
 export const SinglePost = ({ postId }: ISinglePost) => {
   const navigate = useNavigate();
 
@@ -34,31 +36,66 @@ export const SinglePost = ({ postId }: ISinglePost) => {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [error, setError] = useState<ErrorType | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [usingMockData, setUsingMockData] = useState(false);
 
   useEffect(() => {
     if (postId) {
       const fetchPost = async () => {
-        try {
-          const id = Number(postId);
+        setIsDataLoading(true);
+        setError(null);
+        setErrorMessage(null);
+        setUsingMockData(false);
 
+        const id = Number(postId);
+        let apiError: Error | null = null;
+
+        // Try to get posts data from real API
+        try {
           const postsService = new PostsService();
           const data = await postsService.getPostById(id);
+
+          console.log(data);
 
           setPostData(data);
 
           if (!data) {
             setError('empty-data');
           }
-        } catch (err) {
+
+          return; // successful request, return to main flow
+        } catch (error) {
+          apiError = error instanceof Error ? error : new Error(String(error));
+        }
+
+        // If real API is unavailable, get mock data
+        try {
+          const mockData = await generateSinglePostData(id);
+
+          setPostData(mockData);
+          setUsingMockData(true);
+
+          if (!mockData) {
+            setError('empty-data');
+          }
+        } catch {
           setError('default');
-          setErrorMessage(err instanceof Error ? err.message : 'Ошибка при загрузке данных');
+          setErrorMessage(
+            apiError
+              ? `${apiError.message}. Тестовые данные недоступны`
+              : 'Ошибка при загрузке данных. Тестовые данные недоступны'
+          );
           setPostData(null);
-        } finally {
-          setIsDataLoading(false);
         }
       };
 
-      fetchPost();
+      fetchPost()
+        .catch(() => {
+          setError('default');
+          setErrorMessage('Неизвестная ошибка при загрузке данных');
+        })
+        .finally(() => {
+          setIsDataLoading(false);
+        });
     }
   }, [postId]);
 
@@ -71,6 +108,14 @@ export const SinglePost = ({ postId }: ISinglePost) => {
 
       {hasContent && (
         <Grid cols={5} colGap="2xl" rowGap="xl" className={styles.post}>
+          {usingMockData && (
+            <GridItem col={5}>
+              <Text view="warning" size="m">
+                Внимание: используются тестовые данные, так как сервер недоступен
+              </Text>
+            </GridItem>
+          )}
+
           <GridItem col={2}>
             <img
               className={styles.post__image}

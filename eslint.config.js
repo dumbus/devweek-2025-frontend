@@ -25,7 +25,8 @@ export default [
         console: 'readonly',
         fetch: 'readonly',
         alert: 'readonly',
-        setTimeout: 'readonly'
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly'
       },
       ecmaVersion: 2021
     }

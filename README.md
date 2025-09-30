@@ -1,54 +1,88 @@
-# React + TypeScript + Vite
+## Фронтенд часть приложения для Кейса "ИИ-генератор контента о недвижимости в соцсети" на Хакатоне DevWeek 2025
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![react version](https://img.shields.io/badge/react-19.1.0-blue)
+![react-router-dom version](https://img.shields.io/badge/react--router--dom-7.6.0-blue)
+![sass version](https://img.shields.io/badge/sass-1.89.0-blue)
+![consta-uikit version](https://img.shields.io/badge/consta--uikit-5.19.2-blue)
+![consta-icons version](https://img.shields.io/badge/consta--icons-1.1.0-blue)
+![eslint version](https://img.shields.io/badge/eslint-9.6.1-brightgreen)
+![prettier version](https://img.shields.io/badge/prettier-3.5.3-brightgreen)
+![vite version](https://img.shields.io/badge/vite-6.3.5-brightgreen)
 
-Currently, two official plugins are available:
+### Информация о хакатоне:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- _Исходное задание_: Сервис автоматической генерации постов с помощью ИИ для соцсетей о недвижимости на основании новостей, статей, опубликованных в открытых источниках и собственных инфоповодах. Необходимо использовать уже готовые AI-решения с бесплатной моделью распространения.
 
-## Expanding the ESLint configuration
+- Страница хакатона: [DevWeek-2025](https://www.ipkn.itmo.ru/devweek#may24)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Презентация с представления проекта: [Ссылка на презентацию](https://drive.google.com/file/d/1mGGX9jq9okXdrpmshsDzXgnO7MeOSaiw/view)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Описание предлагаемого решения
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Использованные технологии и инструменты
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. [React](https://react.dev/)
+2. [React Router](https://reactrouter.com/en/main)
+3. [SCSS](https://sass-lang.com/)
+4. [Consta](https://consta.design/)
+5. [ESLint](https://eslint.org/)
+6. [Prettier](https://prettier.io/)
+7. [Vite](https://vite.dev/)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Описание Backend-части
+
+> На данный момент работа backend-сервисов проекта приостановлена
+
+- Раз в несколько часов запускаются парсеры следующих новостных ресурсов: [Фонтанка](https://www.fontanka.ru/realty/), [Самолет](https://samolet.ru/spb/news/?utm_referrer=https%3A%2F%2Fwww.google.com%2F), [Недвижимость и строительство Петербурга](https://nsp.ru/analitika).
+- Парсеры извлекают основную информацию о новостях, готовят краткую выжимку с помощью обращения к нейросетевым агентам (`deepseek`, `gemma`, `llama`) с помощью OpenRouter и сохраняют записи о полученных новостях в базу данных.
+- Развёрнут сервис, предоставляющий API, к которому в дальнейшем обращается frontend-часть приложения (Развёрнуто по адресу `https://devweek-2025.ru/posts`, но на данный момент работа приостановлена).
+
+### Описание Frontend-части (на данный момент используется часть данных)
+
+> На данный момент приложение работает с небольшой частью данных (выступающих в качестве заглушки), поскольку работа backend-части проекта приостановлена
+
+1. Главная страница (URL: `/posts`):
+
+- Содержит список превью новостей с пагинацией.
+- Возможен переход на страницу отдельной новости с помощью клика на карточку.
+
+2. Страница отдельной новости (URL: `/posts/:id`):
+
+- Содержит подробную информацию о новости, полученной с помощью парсинга интернет-ресурсов.
+- Содержит кнопку перехода на страницу генерации поста, основанного на данной новости.
+
+3. Страница генерации поста для социальной сети (URL: `posts/generation`):
+
+- Страница предназначена для генерации поста для социальной сети на основе заинтересовавшего пользователя реальной новости, на этот случай заготовлены стандартные промпты для генерации изображения и текста поста, в которые автоматически добавляется информация о выбранном посте.
+- Имеется возможность добавить кастомные промпты для генерации изображения и текста поста социальной сети.
+- Имеется возможность выбрать 1 из 4 стилей изображения.
+- Имеется возможность добавить "негативный промпт" (чего необходимо избегать при генерации изображения).
+- Имеется возможность перегенерировать контент в случае, если результат не устраивает пользователя.
+- Предусмотрены компоненты для отображения состояния загрузки и ошибки.
+- Реализована адаптивная вёрстка вплоть до экранов мобильных устройств шириной в 320 пикселей.
+
+4. Генерация контента.
+
+- Для генерации изображения используется связка из 2 AI-агентов: [Kandinsky](https://www.sberbank.com/promo/kandinsky/) и [Stablecog](https://stablecog.com/). Основным агентом является Kandinsky, в случае, если при генерации с его помощью произошла ошибка - приложение автоматически обращается к запасному агенту - Stablecog.
+- Для генерации текста используется [OpenRouter](https://openrouter.ai/) и связка из 3 AI-агентов: `deepseek`, `gemma`, `llama`. В случае отказа одного из агентов, OpenRouter автоматически направляет запрос на следующего агента из списка. Для OpenRouter предоставлено 2 API-ключа. В случае, если для одного из API-ключей закончились запросы или что-то пошло не так, приложение автоматически переключится на альтернативный API-ключ.
+
+### Скриншоты приложения
+
+1. Главная страница
+
+<img width="1918" height="953" alt="posts-list" src="https://github.com/user-attachments/assets/39859b60-2777-43cd-a073-6dd31d591c6f" />
+
+2. Страница отдельной новости
+
+<img width="1920" height="946" alt="single-post" src="https://github.com/user-attachments/assets/263f99dd-4582-412d-b6b3-c72507015cd1" />
+
+3. Страница генерации поста для социальной сети
+
+<img width="1916" height="981" alt="generated-post" src="https://github.com/user-attachments/assets/4adedf8a-aac1-4722-a4b6-27fc07087f88" />
+
+### Команда проекта
+
+- [Дегтярёв Максим](https://github.com/dumbus) — Роль (Frontend Developer, Lead)
+- [Вайтович Дмитрий](https://github.com/5Cord) — Роль (Frontend Developer)
+- [Ожиганов Александр](https://github.com/Aubameyang17) — Роль (Backend Developer)
+- [Дмитриев Иван](https://github.com/username) — Роль (Backend Developer)
