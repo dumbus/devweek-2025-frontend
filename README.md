@@ -85,4 +85,4 @@
 - [Дегтярёв Максим](https://github.com/dumbus) — Роль (Frontend Developer, Lead)
 - [Вайтович Дмитрий](https://github.com/5Cord) — Роль (Frontend Developer)
 - [Ожиганов Александр](https://github.com/Aubameyang17) — Роль (Backend Developer)
-- [Дмитриев Иван](https://github.com/username) — Роль (Backend Developer) // TODO: Добавить ссылку на github
+- [Дмитриев Иван](https://github.com/username) — Роль (Backend Developer)
